@@ -1,0 +1,9 @@
+# docker
+.env
+
+# logs
+*.log
+
+# composer
+.cache
+vendor
