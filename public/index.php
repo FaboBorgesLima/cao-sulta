@@ -1,2 +1,2 @@
 <?php
-echo "Hello world!";
+require __DIR__ . "/../config/bootstrap.php";

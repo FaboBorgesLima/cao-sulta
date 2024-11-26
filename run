@@ -5,8 +5,26 @@ set -o pipefail
 
 source .env
 
+RED='\033[0;31m'
+NC='\033[0m'
+GREEN='\033[0;32';
+
+HELP_MSG=$(cat <<EOF
+commands: 
+    up
+    down
+    make:controller
+EOF
+)
+function --help {
+    echo "${HELP_MSG}";
+}
+function -h {
+    echo "${HELP_MSG}";
+}
+
+
 function up {
-    echo "test"
     docker compose up "${@}"
 }
 
@@ -19,6 +37,29 @@ function composer {
      -e COMPOSER_CACHE_DIR="/app/.cache/composer" \
      -u "$(id -u):$(id -g)" -v "$(pwd):/app"      \
      -w /app composer:2.7.2 composer "${@}"
+}
+
+function make:controller {
+    FILE=$(cat <<EOF
+<?php
+
+namespace App\Controller;
+
+use Core\Http\Controllers\Controller;
+use Core\Http\Response;
+
+class ${@}Controller extends Controller
+{
+    function show(): void
+    {
+        echo "${@}";
+    }
+}
+
+EOF
+) 
+
+    echo "${FILE}" > app/Controller/${@}Controller.php
 }
 
 ${@}
