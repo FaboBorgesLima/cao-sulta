@@ -16,7 +16,7 @@ class Response
      */
     function __construct(public int $code = 200, protected array $headers = [], protected ?string $file = null, protected ?array $data = null) {}
 
-    public function addHeader(string $name, string $value)
+    public function setHeader(string $name, string $value)
     {
         $this->headers[$name] = $value;
     }
@@ -26,6 +26,11 @@ class Response
         return new Response(code: 302, headers: ["location" => $location]);
     }
 
+    public static function goBack(): Response
+    {
+        return static::redirectTo($_SERVER['HTTP_REFERER'] ?? '/');
+    }
+
     /**
      * @param array<string,string> $data
      */
@@ -33,6 +38,15 @@ class Response
     {
 
         return new Response(data: $data, file: Constants::rootPath()->join('app/views/' . $view . '.phtml'));
+    }
+
+    public static function json(array $json): Response
+    {
+        $res = new Response(data: ["json" => $json], file: Constants::rootPath()->join('app/views/json.php'));
+
+        $res->setHeader("Content-Type", "application/json; chartset=utf-8");
+
+        return $res;
     }
 
     public function removeHeader(string $name): ?string
