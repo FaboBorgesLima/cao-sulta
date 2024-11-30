@@ -9,7 +9,8 @@ class RouteWrapperMiddleware
 {
     public function __construct(
         private string $name
-    ) {}
+    ) {
+    }
 
     public function group(callable $callback): void
     {
