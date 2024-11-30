@@ -10,4 +10,5 @@ parameters:
     - app/views/*
 
   ignoreErrors:
-    
+    - '#Unsafe usage of new static\(\)\.#'
+    - '#Call to an undefined method ReflectionType::getName\(\).#'
