@@ -6,17 +6,23 @@ use Core\Constants\Constants;
 
 class Response
 {
-
     protected static bool $sended = false;
 
 
     /**
      * @param array<string,string> $headers
-     * @param array<string,string> $data
+     * @param array<string,mixed> $data
      */
-    function __construct(public int $code = 200, protected array $headers = [], protected ?string $file = null, protected ?array $data = null) {}
+    public function __construct(
+        public int $code = 200,
+        protected array $headers = [],
+        protected ?string $file = null,
+        protected ?array $data = null
+    ) {
+        /** */
+    }
 
-    public function setHeader(string $name, string $value)
+    public function setHeader(string $name, string $value): void
     {
         $this->headers[$name] = $value;
     }
@@ -32,7 +38,7 @@ class Response
     }
 
     /**
-     * @param array<string,string> $data
+     * @param array<string,mixed> $data
      */
     public static function render(string $view, array $data = null): Response
     {
@@ -40,6 +46,9 @@ class Response
         return new Response(data: $data, file: Constants::rootPath()->join('app/views/' . $view . '.phtml'));
     }
 
+    /**
+     * @param array<string,mixed> $json
+     */
     public static function json(array $json): Response
     {
         $res = new Response(data: ["json" => $json], file: Constants::rootPath()->join('app/views/json.php'));
@@ -64,8 +73,9 @@ class Response
 
     public function send(): void
     {
-        if (static::$sended)
+        if (static::$sended) {
             return;
+        }
 
         static::$sended = true;
 

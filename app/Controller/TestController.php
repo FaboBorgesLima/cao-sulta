@@ -7,7 +7,7 @@ use Core\Http\Response;
 
 class TestController extends Controller
 {
-    function show(): void
+    public function show(): void
     {
         echo "Test";
     }
