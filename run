@@ -5,8 +5,29 @@ set -o pipefail
 
 source .env
 
+RED='\033[0;31m'
+NC='\033[0m'
+GREEN='\033[0;32';
+
+HELP_MSG=$(cat <<EOF
+commands: 
+    up
+    down
+    create
+    phpcs
+    phpcbf
+    phpstan
+EOF
+)
+function --help {
+    echo "${HELP_MSG}";
+}
+function -h {
+    echo "${HELP_MSG}";
+}
+
+
 function up {
-    echo "test"
     docker compose up "${@}"
 }
 
@@ -14,11 +35,33 @@ function down {
     docker compose down "${@}"
 }
 
+function phpcs {
+   TEST_PATH="${@:-.}"
+   docker compose run --rm php ./vendor/bin/phpcs ${TEST_PATH}
+}
+
+function phpcbf {
+   TEST_PATH="${@:-.}"
+   docker compose run --rm php ./vendor/bin/phpcbf ${TEST_PATH}
+}
+
+function phpstan {
+   TEST_PATH="${@:-}"
+   docker compose run --rm php ./vendor/bin/phpstan ${TEST_PATH}
+}
+
+
 function composer {
     docker run --rm --interactive                 \
      -e COMPOSER_CACHE_DIR="/app/.cache/composer" \
      -u "$(id -u):$(id -g)" -v "$(pwd):/app"      \
      -w /app composer:2.7.2 composer "${@}"
+}
+
+function cli {
+    docker run --rm --interactive                \
+     -u "$(id -u):$(id -g)" -v "$(pwd):/app"     \
+     -w /app php:8.3 php cli/index.php "${@}"
 }
 
 ${@}
