@@ -21,9 +21,9 @@ Issue: **#ISSUE_NUMBER**
 - [ ] test: Adding missing tests or correcting existing tests
 - [ ] perf: A code change that improves performance
 - [ ] docs: Documentation only changes
-- [x] style: Changes that do not affect the meaning of the code (e.g. prettier format)
+- [ ] style: Changes that do not affect the meaning of the code (e.g. prettier format)
 - [ ] ci: Changes to our CI configuration files and scripts
-- [ ] chore: Changes to the build process or auxiliary tools and libraries functionality to not work as expected
+- [x] chore: Changes to the build process or auxiliary tools and libraries functionality to not work as expected
 
 ---
 
