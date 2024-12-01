@@ -13,7 +13,9 @@ HELP_MSG=$(cat <<EOF
 commands: 
     up
     down
-    create
+    cli
+    db:reset
+    db:populate
     phpcs
     phpcbf
     phpstan
@@ -22,10 +24,15 @@ EOF
 function --help {
     echo "${HELP_MSG}";
 }
+
 function -h {
     echo "${HELP_MSG}";
 }
 
+function test {
+   TEST_PATH="${@:-tests}"
+   docker compose run --rm php ./vendor/bin/phpunit --color ${TEST_PATH}
+}
 
 function up {
     docker compose up "${@}"
@@ -57,6 +64,16 @@ function composer {
      -u "$(id -u):$(id -g)" -v "$(pwd):/app"      \
      -w /app composer:2.7.2 composer "${@}"
 }
+
+function db:reset {
+    docker compose cp database/schema.sql db:/tmp/
+    docker compose exec db sh -c "MYSQL_PWD=${DB_PASSWORD} mysql -u ${DB_USERNAME} ${DB_DATABASE} --default-character-set utf8mb4 < /tmp/schema.sql"
+}
+
+function db:populate {
+    docker compose exec php php database/Populate/populate.php
+}
+
 
 function cli {
     docker run --rm --interactive                \
