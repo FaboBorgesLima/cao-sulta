@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Browser;
 
 use PHPUnit\Framework\TestCase;
 
