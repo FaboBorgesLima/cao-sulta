@@ -7,7 +7,7 @@ use PHPUnit\TextUI\Command\Command;
 
 class CLI
 {
-    public static const HELP_MESSAGE = "-------------- commands --------------
+    public const HELP_MESSAGE = "-------------- commands --------------
     create controller <NameController>
     create model <Name>
 ";
@@ -85,9 +85,11 @@ class $name extends Model
      */
     static public function init(array $argv): void
     {
-        if (array_key_exists(1, $argv) && function_exists($argv[1])) {
+        if (array_key_exists(1, $argv) && method_exists(static::class, $argv[1])) {
             $args = array_splice($argv, 2);
-            call_user_func($argv[1], $args);
+
+            call_user_func(static::class . "::" . $argv[1], $args);
+
             return;
         }
         echo CLI::HELP_MESSAGE;
