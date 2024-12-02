@@ -65,7 +65,8 @@ class AuthenticationController extends Controller
         $user = User::findBy([
             "cpf" => $request->getParam("cpf", ""),
             "email" => $request->getParam("email", "")
-        ]);;
+        ]);
+        ;
 
         if (!$user) {
             return Response::goBack();
