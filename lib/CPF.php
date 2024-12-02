@@ -2,8 +2,6 @@
 
 namespace Lib;
 
-use Error;
-
 class CPF
 {
     public static function isValid(string $cpf): bool
