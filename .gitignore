@@ -7,3 +7,8 @@
 # composer
 .cache
 vendor
+
+# node
+
+/node_modules
+/public/assets/build

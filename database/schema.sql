@@ -11,6 +11,19 @@ CREATE TABLE users (
     cpf CHAR(11) UNIQUE NOT NULL
 );
 
+DROP TABLE IF EXISTS user_tokens;
+
+CREATE TABLE user_tokens (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP,
+    token CHAR(44) NOT NULL,
+    user_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+DROP TABLE IF EXISTS vets;
+
 CREATE TABLE vets (
     id INT AUTO_INCREMENT PRIMARY KEY,
     created_at TIMESTAMP NOT NULL,
@@ -19,13 +32,27 @@ CREATE TABLE vets (
     FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
+DROP TABLE IF EXISTS crmv_registers;
+
+CREATE TABLE crmv_registers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP,
+    number CHAR(7) NOT NULL UNIQUE,
+    vet_id INT NOT NULL,
+    FOREIGN KEY (vet_id) REFERENCES vet(id)
+);
+
+DROP TABLE IF EXISTS permissions;
+
 CREATE TABLE permissions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP,
     user_id INT NOT NULL,
     vet_id INT NOT NULL,
-    
+    FOREIGN KEY (vet_id) REFERENCES vet(id),
+    FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
 SET foreign_key_checks = 1;

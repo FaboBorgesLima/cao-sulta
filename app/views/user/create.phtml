@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <head>
+        <link rel="stylesheet" href="/assets/build/style.css">
+
+        <title>Register</title>
+    </head>
+
+<body>
+    <main>
+        <div class="w-screen h-screen flex items-center justify-center">
+            <form method="post" action="<?= route("user.store") ?>" class="card p-4 md:w-1/2 mx-4 flex flex-col gap-4">
+                <h1 class="font-bold text-2xl text-center">Register</h1>
+                <label class="form-label">
+                    Name
+                    <input name="name" type="text" placeholder="name" class="form-input">
+                </label>
+                <?php
+                if (isset($errors["name"])):
+                ?>
+                    <span class="text-red-500 text-center"><?= $errors["name"] ?></span>
+                <?php endif; ?>
+                <label class="form-label">
+                    E-mail
+                    <input name="email" type="email" placeholder="email" class="form-input">
+                </label>
+                <?php
+                if (isset($errors["email"])):
+                ?>
+                    <span class="text-red-500 text-center"><?= $errors["email"] ?></span>
+                <?php endif; ?>
+                <label class="form-label">
+                    CPF
+                    <input name="cpf" type="text" placeholder="cpf" class="form-input">
+                </label>
+                <?php
+                if (isset($errors["cpf"])):
+                ?>
+                    <span class="text-red-500 text-center"><?= $errors["cpf"] ?></span>
+                <?php endif; ?>
+                <button type="submit" class="button p-2 w-full">Submit</button>
+            </form>
+        </div>
+    </main>
+</body>
+
+</html>

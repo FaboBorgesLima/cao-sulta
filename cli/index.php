@@ -7,7 +7,7 @@ use PHPUnit\TextUI\Command\Command;
 
 class CLI
 {
-    public static const HELP_MESSAGE = "-------------- commands --------------
+    public const HELP_MESSAGE = "-------------- commands --------------
     create controller <NameController>
     create model <Name>
 ";
@@ -35,7 +35,12 @@ class CLI
                     echo CLI::HELP_MESSAGE;
                     return;
                 }
-                $file = fopen(__DIR__ . "/../app/Controller/$name.php", "w");
+                $path = __DIR__ . "/../app/Controller/$name.php";
+                if (file_exists($path)) {
+                    echo "app/Controller/$name.php already exits\n";
+                    return;
+                }
+                $file = fopen($path, "w");
                 fwrite($file, "<?php
 
 namespace App\Controller;
@@ -54,7 +59,15 @@ class $name extends Controller
                 echo "created $name Controller at app/Controller/$name.php\n";
                 break;
             case "model":
-                $file = fopen(__DIR__ . "/../app/Models/$name.php", "w");
+
+                $path = __DIR__ . "/../app/Models/$name.php";
+
+                if (file_exists($path)) {
+                    echo "app/Models/$name.php already exits\n";
+                    return;
+                }
+
+                $file = fopen($path, "w");
                 $table_name = StringUtils::camelToSnakeCase($name) . "s";
                 fwrite($file, "<?php
 
@@ -85,9 +98,11 @@ class $name extends Model
      */
     static public function init(array $argv): void
     {
-        if (array_key_exists(1, $argv) && function_exists($argv[1])) {
+        if (array_key_exists(1, $argv) && method_exists(static::class, $argv[1])) {
             $args = array_splice($argv, 2);
-            call_user_func($argv[1], $args);
+
+            call_user_func(static::class . "::" . $argv[1], $args);
+
             return;
         }
         echo CLI::HELP_MESSAGE;

@@ -1,0 +1,20 @@
+@tailwind base;
+@layer components {
+  .card {
+    @apply shadow-2xl rounded-2xl;
+  }
+  .button {
+    @apply rounded-2xl bg-blue-600/75 text-gray-50 shadow-2xl font-bold transition-all duration-300 hover:bg-blue-600;
+  }
+  .form-label {
+    @apply flex flex-col gap-4 text-center w-full font-bold;
+  }
+  .form-input {
+    @apply text-center rounded-2xl font-normal;
+  }
+  .form-card {
+    @apply w-1/2 mx-auto p-4 flex flex-col items-center gap-4 card;
+  }
+}
+@tailwind components;
+@tailwind utilities;

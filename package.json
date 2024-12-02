@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "build":"tsc -p . && npx tailwindcss -i ./public/assets/style.css -o ./public/assets/build/style.css",
+    "dev": "tsc --watch & npx tailwindcss -i ./public/assets/style.css -o ./public/assets/build/style.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.15",
+    "typescript": "^5.7.2"
+  }
+}
