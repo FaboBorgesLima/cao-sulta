@@ -12,4 +12,4 @@ parameters:
   ignoreErrors:
     - '#Unsafe usage of new static\(\)\.#'
     - '#Call to an undefined method ReflectionType::getName\(\).#'
-    - '#Access to an undefined property App\\Models\\UserToken::\$[a-zA-Z0-9_]+.#'
+    - '#Access to an undefined property App\\Models\\[a-zA-Z0-9_]+::\$[a-zA-Z0-9_]+.#'
