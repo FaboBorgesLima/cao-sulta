@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Core\Database\ActiveRecord\HasMany;
 use Core\Database\ActiveRecord\Model;
 use Lib\Validations;
 
@@ -18,5 +19,10 @@ class User extends Model
         Validations::uniqueness("email", $this);
         Validations::uniqueness("cpf", $this);
         Validations::isCPF("cpf", $this);
+    }
+
+    public function userTokens(): HasMany
+    {
+        return $this->hasMany(UserToken::class, "user_id");
     }
 }

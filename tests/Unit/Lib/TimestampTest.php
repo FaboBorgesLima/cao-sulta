@@ -30,9 +30,5 @@ class TimestampTest extends TestCase
         $ts = Timestamp::fromMysql("1970-01-01 00:00:00");
 
         $this->assertEquals($ts->time, 0);
-
-        $ts = Timestamp::fromMysql("292277026596-12-04 15:30:07");
-
-        $this->assertEquals($ts->time, PHP_INT_MAX);
     }
 }

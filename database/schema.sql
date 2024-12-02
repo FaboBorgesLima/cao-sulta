@@ -19,7 +19,7 @@ CREATE TABLE user_tokens (
     updated_at TIMESTAMP,
     token CHAR(44) NOT NULL,
     user_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES user(id)
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 DROP TABLE IF EXISTS vets;

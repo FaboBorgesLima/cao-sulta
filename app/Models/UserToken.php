@@ -4,12 +4,18 @@ namespace App\Models;
 
 use Core\Database\ActiveRecord\BelongsTo;
 use Core\Database\ActiveRecord\Model;
+use Lib\Token;
 use Lib\Validations;
 
 class UserToken extends Model
 {
-    static protected string $table = "user_tokens";
+    protected static string $table = "user_tokens";
     protected static array $columns = ["token", "user_id"];
+
+    public static function make(int $user_id): UserToken
+    {
+        return new UserToken(["token" => Token::make(), "user_id" => $user_id]);
+    }
 
     public function validates(): void
     {

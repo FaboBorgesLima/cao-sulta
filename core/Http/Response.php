@@ -4,6 +4,8 @@ namespace Core\Http;
 
 use Core\Constants\Constants;
 
+use function PHPUnit\Framework\returnSelf;
+
 class Response
 {
     protected static bool $sended = false;
@@ -22,9 +24,11 @@ class Response
         /** */
     }
 
-    public function setHeader(string $name, string $value): void
+    public function setHeader(string $name, string $value): self
     {
         $this->headers[$name] = $value;
+
+        return $this;
     }
 
     public static function redirectTo(string $location): Response
@@ -73,17 +77,14 @@ class Response
 
     public function send(): void
     {
-        if (static::$sended) {
-            return;
+        if (!static::$sended) {
+            foreach ($this->headers as $name => $value) {
+                header(implode(":", [$name, $value]));
+            }
+            header("http/" . (string)$this->code);
         }
 
         static::$sended = true;
-
-        header("http/" . (string)$this->code);
-
-        foreach ($this->headers as $name => $value) {
-            header(implode(":", [$name, $value]));
-        }
 
         if ($this->data) {
             extract($this->data);

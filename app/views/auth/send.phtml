@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <?php require(__DIR__ . "/../Components/head.phtml"); ?>
+    <title>Token</title>
+</head>
+
+<body>
+    <main class="w-screen h-screen items-center justify-center flex">
+        <a href="<?= route("auth.auth", ["token" => $token]) ?>" class="text-blue-600 font-bold">Enter</a>
+    </main>
+</body>
+
+</html>
