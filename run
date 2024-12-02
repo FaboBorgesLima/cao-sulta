@@ -19,6 +19,7 @@ commands:
     phpcs
     phpcbf
     phpstan
+    test
 EOF
 )
 function --help {
