@@ -20,6 +20,11 @@ class StringUtils
         return $camel_case;
     }
 
+    public static function isNumeric(string $str): bool
+    {
+        return ! (bool) preg_match('/[^0-9]/', $str);
+    }
+
     public static function snakeToCamelCase($string)
     {
         return ucfirst(self::lowerSnakeToCamelCase($string));
@@ -27,7 +32,7 @@ class StringUtils
 
     public static function isUpperCamelCase($string): bool
     {
-        preg_match('/([A-Z][a-z0-9]+)+/', $string, $matches);
+        preg_match('/^([A-Z][a-z0-9]+)+/', $string, $matches);
 
         if (count($matches) == 0) {
             return false;

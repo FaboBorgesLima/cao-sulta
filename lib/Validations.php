@@ -3,6 +3,7 @@
 namespace Lib;
 
 use Core\Database\Database;
+use Exception;
 
 class Validations
 {
@@ -26,6 +27,19 @@ class Validations
         return true;
     }
 
+    public static function isCPF($attribute, $object): void
+    {
+
+        if ($object->$attribute === null) {
+            return;
+        }
+
+        if (!CPF::isValid($object->$attribute)) {
+            $object->addError($attribute, "não é um CPF válido");
+            return;
+        }
+    }
+
     public static function uniqueness($fields, $object)
     {
         if (!is_array($fields)) {
@@ -33,7 +47,7 @@ class Validations
         }
 
         $table = $object::table();
-        $conditions = implode(' AND ', array_map(fn ($field) => "{$field} = :{$field}", $fields));
+        $conditions = implode(' AND ', array_map(fn($field) => "{$field} = :{$field}", $fields));
 
         $sql = <<<SQL
             SELECT id FROM {$table} WHERE {$conditions};

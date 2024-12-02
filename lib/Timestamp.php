@@ -16,7 +16,7 @@ class Timestamp
 
     public static function fromMysql(string $mysql_timestamp): Timestamp
     {
-        return new Timestamp(strtotime('Y-m-d H:i:s', $mysql_timestamp));
+        return new Timestamp(strtotime($mysql_timestamp));
     }
 
     public static function fromInt(int $i): Timestamp
