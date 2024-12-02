@@ -77,9 +77,10 @@ abstract class Model
     public function __set(string $property, mixed $value): void
     {
         if ($property == "updated_at" || $property == "created_at") {
-            if (is_string($value))
+            if (is_string($value)) {
                 $this->$property = Timestamp::fromMysql($value);
-
+                return;
+            }
             $this->$property = $value;
             return;
         }
@@ -170,7 +171,8 @@ abstract class Model
                 }
 
                 $stmt->execute();
-                $this->$this->id = (int) $pdo->lastInsertId();
+
+                $this->id = (int)$pdo->lastInsertId();
             } else {
                 $this->updated_at = Timestamp::now();
 
