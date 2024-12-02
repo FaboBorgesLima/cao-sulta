@@ -35,7 +35,12 @@ class CLI
                     echo CLI::HELP_MESSAGE;
                     return;
                 }
-                $file = fopen(__DIR__ . "/../app/Controller/$name.php", "w");
+                $path = __DIR__ . "/../app/Controller/$name.php";
+                if (file_exists($path)) {
+                    echo "app/Controller/$name.php already exits\n";
+                    return;
+                }
+                $file = fopen($path, "w");
                 fwrite($file, "<?php
 
 namespace App\Controller;
@@ -54,7 +59,15 @@ class $name extends Controller
                 echo "created $name Controller at app/Controller/$name.php\n";
                 break;
             case "model":
-                $file = fopen(__DIR__ . "/../app/Models/$name.php", "w");
+
+                $path = __DIR__ . "/../app/Models/$name.php";
+
+                if (file_exists($path)) {
+                    echo "app/Models/$name.php already exits\n";
+                    return;
+                }
+
+                $file = fopen($path, "w");
                 $table_name = StringUtils::camelToSnakeCase($name) . "s";
                 fwrite($file, "<?php
 
