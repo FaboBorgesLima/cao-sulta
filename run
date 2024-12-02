@@ -20,6 +20,7 @@ commands:
     phpcbf
     phpstan
     test
+    npm
 EOF
 )
 function --help {
@@ -64,6 +65,12 @@ function composer {
      -e COMPOSER_CACHE_DIR="/app/.cache/composer" \
      -u "$(id -u):$(id -g)" -v "$(pwd):/app"      \
      -w /app composer:2.7.2 composer "${@}"
+}
+
+function npm {
+    docker run --rm --interactive                 \
+     -u "$(id -u):$(id -g)" -v "$(pwd):/app"      \
+     -w /app node:22-alpine npm "${@}"
 }
 
 function db:reset {

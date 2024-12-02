@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "dev": "tsc --watch & npx tailwindcss -i ./public/assets/src/style.css -o ./public/assets/build/style.css --watch"
+    "build":"tsc -p . && npx tailwindcss -i ./public/assets/style.css -o ./public/assets/build/style.css",
+    "dev": "tsc --watch & npx tailwindcss -i ./public/assets/style.css -o ./public/assets/build/style.css --watch"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.15",
