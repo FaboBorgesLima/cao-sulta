@@ -33,6 +33,13 @@ class Auth
         return isset($_SESSION['user']['id']) && self::user() !== null;
     }
 
+    public static function isVet(): bool
+    {
+        $user = Auth::user();
+
+        return $user && $user->vet();
+    }
+
     public static function token(): ?string
     {
         if (isset($_SESSION['user']['token'])) {
@@ -43,10 +50,12 @@ class Auth
     public static function logout(): void
     {
         unset($_SESSION['user']['id']);
+
         $user_token = UserToken::findBy(["token" => Auth::token()]);
 
         if ($user_token) {
             $user_token->destroy();
         }
+        unset($_SESSION['user']['token']);
     }
 }

@@ -27,7 +27,7 @@ class Validations
         return true;
     }
 
-    public static function isCPF($attribute, $object): void
+    public static function CPF($attribute, $object): void
     {
 
         if ($object->$attribute === null) {
@@ -36,6 +36,19 @@ class Validations
 
         if (!CPF::isValid($object->$attribute)) {
             $object->addError($attribute, "não é um CPF válido");
+            return;
+        }
+    }
+
+    public static function numeric($attribute, $object): void
+    {
+
+        if ($object->$attribute === null) {
+            return;
+        }
+
+        if (!StringUtils::isNumeric($object->$attribute)) {
+            $object->addError($attribute, "deve ser um número");
             return;
         }
     }

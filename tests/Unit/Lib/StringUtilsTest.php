@@ -9,11 +9,15 @@ class StringUtilsTest extends TestCase
 {
     public function test_is_upper_camel_case(): void
     {
-        $this->assertFalse(StringUtils::isUpperCamelCase("tEST"));
         $this->assertTrue(StringUtils::isUpperCamelCase("TestTest"));
+        $this->assertTrue(StringUtils::isUpperCamelCase("CPF"));
+        $this->assertTrue(StringUtils::isUpperCamelCase("CPFTest"));
+        $this->assertTrue(StringUtils::isUpperCamelCase("TestTest0"));
+
+        $this->assertFalse(StringUtils::isUpperCamelCase("tEST"));
         $this->assertFalse(StringUtils::isUpperCamelCase("Test Test"));
         $this->assertFalse(StringUtils::isUpperCamelCase("testtest"));
-        $this->assertTrue(StringUtils::isUpperCamelCase("TestTest0"));
+        $this->assertFalse(StringUtils::isUpperCamelCase("0testtest"));
     }
 
     public function test_is_numeric(): void

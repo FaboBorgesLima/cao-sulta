@@ -2,8 +2,10 @@
 
 namespace Database\Populate;
 
+use App\Models\CRMVRegister;
 use App\Models\User;
 use App\Models\UserToken;
+use App\Models\Vet;
 use Lib\CPF;
 use Lib\Token;
 
@@ -13,11 +15,23 @@ class UserPopulate
     {
 
         for ($i = 0; $i < 10; $i++) {
-            $user = new User(["name" => "tonho$i", "cpf" => CPF::getRandomCPF(), "email" => "tonho$i@tonho.com"]);
+            $user = User::factory();
+
             $user->save();
 
-            $token = new UserToken(["token" => Token::make(), "user_id" => $user->id]);
-            $token->save();
+            $user->userTokens()->new(["token" => Token::make()])->save();
+
+            if (rand(0, 1)) {
+
+
+                /** @var \App\Models\Vet */
+                $vet = $user->vet()->new([]);
+
+                $vet->attachCRMVRegister(new CRMVRegister(["state" => "PR", "crmv" => "200000$i"]));
+
+                $vet->save();
+            }
         }
+        var_dump(array_map(fn($model) => $model->vet()->get(), User::all()));
     }
 }
