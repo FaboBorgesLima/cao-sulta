@@ -4,9 +4,6 @@ namespace Database\Populate;
 
 use App\Models\CRMVRegister;
 use App\Models\User;
-use App\Models\UserToken;
-use App\Models\Vet;
-use Lib\CPF;
 use Lib\Token;
 
 class UserPopulate

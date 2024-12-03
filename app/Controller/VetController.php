@@ -46,9 +46,9 @@ class VetController extends Controller
         /** @var \App\Models\Vet */
         $vet = $user->vet()->new([]);
 
-        $vet->save();
+        $vet->attachCRMVRegister(new CRMVRegister($crmvAttributes));
 
-        $vet->CRMVRegisters()->new($crmvAttributes)->save();
+        $vet->save();
 
         return Response::redirectTo(route("auth.send", [
             "id" => $user->id,
