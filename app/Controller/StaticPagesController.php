@@ -15,4 +15,12 @@ class StaticPagesController extends Controller
         }
         return Response::render("home");
     }
+
+    public function register(): Response
+    {
+        if (Auth::check()) {
+            return Response::redirectTo(route("dashboard"));
+        }
+        return Response::render("register");
+    }
 }

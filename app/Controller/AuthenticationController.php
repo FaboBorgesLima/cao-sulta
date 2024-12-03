@@ -51,13 +51,13 @@ class AuthenticationController extends Controller
         ]);
 
         if (!$user) {
-            return Response::redirectTo(route("user.login"));
+            return Response::redirectTo(route("auth.new"));
         }
 
-        $user_token = UserToken::make($user->id);
-        $user_token->save();
+        $userToken = UserToken::make($user->id);
+        $userToken->save();
 
-        return Response::render("auth/send", ["token" => $user_token->token]);
+        return Response::render("auth/send", ["token" => $userToken->token]);
     }
 
     public function find(Request $request): Response

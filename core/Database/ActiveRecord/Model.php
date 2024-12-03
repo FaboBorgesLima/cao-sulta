@@ -332,7 +332,7 @@ abstract class Model
         $attributes = implode(', ', static::$columns);
 
         $sql = <<<SQL
-            SELECT id, {$attributes} FROM {$table} WHERE 
+            SELECT id,created_at,updated_at, {$attributes} FROM {$table} WHERE 
         SQL;
 
         $sqlConditions = array_map(function ($column) {
@@ -389,6 +389,11 @@ abstract class Model
     public function hasMany(string $related, string $foreignKey): HasMany
     {
         return new HasMany($this, $related, $foreignKey);
+    }
+
+    public function hasOne(string $related, string $foreignKey): HasOne
+    {
+        return new HasOne($this, $related, $foreignKey);
     }
 
     public function BelongsToMany(string $related, string $pivot_table, string $from_foreign_key, string $to_foreign_key): BelongsToMany

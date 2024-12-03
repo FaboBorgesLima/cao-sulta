@@ -29,7 +29,7 @@ CREATE TABLE vets (
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP,
     user_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES user(id)
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 DROP TABLE IF EXISTS crmv_registers;
@@ -38,9 +38,10 @@ CREATE TABLE crmv_registers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP,
-    number CHAR(7) NOT NULL UNIQUE,
+    crmv CHAR(7) NOT NULL,
+    state CHAR(2) NOT NULL,
     vet_id INT NOT NULL,
-    FOREIGN KEY (vet_id) REFERENCES vet(id)
+    FOREIGN KEY (vet_id) REFERENCES vets(id)
 );
 
 DROP TABLE IF EXISTS permissions;
@@ -51,8 +52,8 @@ CREATE TABLE permissions (
     updated_at TIMESTAMP,
     user_id INT NOT NULL,
     vet_id INT NOT NULL,
-    FOREIGN KEY (vet_id) REFERENCES vet(id),
-    FOREIGN KEY (user_id) REFERENCES user(id)
+    FOREIGN KEY (vet_id) REFERENCES vets(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 SET foreign_key_checks = 1;

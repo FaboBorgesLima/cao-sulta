@@ -38,6 +38,18 @@ class UserController extends Controller
 
     public function dashboard(): Response
     {
-        return Response::render("user/dashboard", ["user" => Auth::user()]);
+        $user = Auth::user();
+        /** @var null|\App\Models\Vet */
+        $vet = $user->vet()->get();
+        $crmvs = [];
+        if ($vet) {
+            $crmvs = $vet->CRMVRegisters()->get();
+        }
+
+        return Response::render("user/dashboard", [
+            "name" => $user->name,
+            "isVet" => (bool) $vet,
+            "crmvs" => $crmvs
+        ]);
     }
 }

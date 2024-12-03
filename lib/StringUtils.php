@@ -32,7 +32,7 @@ class StringUtils
 
     public static function isUpperCamelCase($string): bool
     {
-        preg_match('/^([A-Z][a-z0-9]+)+/', $string, $matches);
+        preg_match('/^([A-Z]+([a-z0-9]+)?)+/', $string, $matches);
 
         if (count($matches) == 0) {
             return false;

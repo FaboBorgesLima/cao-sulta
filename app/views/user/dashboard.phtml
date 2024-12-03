@@ -15,7 +15,9 @@
     <main>
         <div class="w-screen h-screen flex items-center justify-center">
             <div class="flex flex-col gap-4 items-center">
-                <h1>Welcome <?= $user->name ?></h1>
+                <h1>Welcome <?= $name ?></h1>
+                <p><?= $isVet ? "vet" : "common user" ?></p>
+
                 <a href="<?= route("auth.logout") ?>">Logout</a>
             </div>
         </div>
