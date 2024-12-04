@@ -3,7 +3,7 @@
 namespace Tests\Unit\Lib;
 
 use Lib\StringUtils;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class StringUtilsTest extends TestCase
 {

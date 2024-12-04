@@ -3,7 +3,7 @@
 namespace Tests\Unit\Lib;
 
 use Lib\Timestamp;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class TimestampTest extends TestCase
 {

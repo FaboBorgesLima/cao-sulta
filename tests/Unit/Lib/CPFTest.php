@@ -3,7 +3,7 @@
 namespace Tests\Unit\Lib;
 
 use Lib\CPF;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class CPFTest extends TestCase
 {
