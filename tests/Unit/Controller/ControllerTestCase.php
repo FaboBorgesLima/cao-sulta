@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Controllers;
+namespace Tests\Unit\Controller;
 
 use Core\Constants\Constants;
 use Core\Http\Request;
