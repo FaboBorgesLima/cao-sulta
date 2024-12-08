@@ -31,4 +31,15 @@ class TimestampTest extends TestCase
 
         $this->assertEquals($ts->time, 0);
     }
+
+    public function test_get_year(): void
+    {
+        $ts = Timestamp::fromInt(1733361775);
+
+        $this->assertEquals($ts->getYear(), 2024);
+
+        $ts = Timestamp::fromInt(0);
+
+        $this->assertEquals($ts->getYear(), 1970);
+    }
 }

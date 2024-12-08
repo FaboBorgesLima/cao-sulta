@@ -16,6 +16,7 @@ commands:
     cli
     db:reset
     db:populate
+    db:console
     phpcs
     phpcbf
     phpstan
@@ -82,6 +83,9 @@ function db:populate {
     docker compose exec php php database/Populate/populate.php
 }
 
+function db:console {
+    docker compose exec db sh -c "MYSQL_PWD=${DB_PASSWORD} mysql -u ${DB_USERNAME} ${DB_DATABASE} --default-character-set utf8mb4"
+}
 
 function cli {
     docker run --rm --interactive                \

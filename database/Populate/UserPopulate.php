@@ -4,7 +4,7 @@ namespace Database\Populate;
 
 use App\Models\CRMVRegister;
 use App\Models\User;
-use Lib\Token;
+use Lib\Random;
 
 class UserPopulate
 {
@@ -16,7 +16,7 @@ class UserPopulate
 
             $user->save();
 
-            $user->userTokens()->new(["token" => Token::make()])->save();
+            $user->userTokens()->new(["token" => Random::token()])->save();
 
             if (rand(0, 1)) {
 

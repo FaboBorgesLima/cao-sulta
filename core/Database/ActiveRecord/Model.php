@@ -19,8 +19,8 @@ abstract class Model
     /** @var array<string, string> */
     protected array $errors = [];
     protected ?int $id = null;
-    protected ?Timestamp $created_at = null;
-    protected ?Timestamp $updated_at = null;
+    public ?Timestamp $created_at = null;
+    public ?Timestamp $updated_at = null;
 
     /** @var array<string, mixed> */
     private array $attributes = [];

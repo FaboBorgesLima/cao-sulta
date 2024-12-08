@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Models\User;
-use App\Models\UserToken;
 use Core\Http\Controllers\Controller;
 use Core\Http\Request;
 use Core\Http\Response;

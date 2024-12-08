@@ -75,6 +75,26 @@ class Response
         return null;
     }
 
+    public function getHeader(string $header): ?string
+    {
+        if (array_key_exists($header, $this->headers)) {
+            return $this->headers[$header];
+        }
+
+        return null;
+    }
+
+    public function getFile(): ?string
+    {
+        return $this->file;
+    }
+
+    /** @return array<string, mixed> | null */
+    public function getData(): ?array
+    {
+        return $this->data;
+    }
+
     public function send(): void
     {
         if (!static::$sended) {
