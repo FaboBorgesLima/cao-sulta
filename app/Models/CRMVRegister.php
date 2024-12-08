@@ -17,7 +17,7 @@ class CRMVRegister extends Model
         Validations::notEmpty("crmv", $this);
         Validations::notEmpty("state", $this);
         Validations::state("state", $this);
-        Validations::numeric("crmv", $this);
+        Validations::crmv("crmv", $this);
         Validations::uniqueness(["crmv", "state"], $this);
     }
 
