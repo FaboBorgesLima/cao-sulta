@@ -15,7 +15,7 @@ Issue: **#ISSUE_NUMBER**
 <!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
 
 - [ ] fix: A bug fix
-- [x] feat: A new feature
+- [ ] feat: A new feature
 - [ ] refactor: A code change that neither fixes a bug nor adds a feature
 - [ ] enhancement: An enhancement makes something better
 - [ ] test: Adding missing tests or correcting existing tests

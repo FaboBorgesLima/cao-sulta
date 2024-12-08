@@ -10,18 +10,30 @@ NC='\033[0m'
 GREEN='\033[0;32';
 
 HELP_MSG=$(cat <<EOF
-commands: 
-    up
-    down
-    cli
-    db:reset
-    db:populate
-    db:console
-    phpcs
-    phpcbf
-    phpstan
-    test
-    npm
+commands:
+
+    docker commands:
+        up
+        down
+
+    db commands:
+        db:reset
+        db:populate
+        db:console
+    
+    testing commands:
+        phpcs
+        phpcbf
+        phpstan
+        test
+    
+    package managers:
+        npm
+        composer
+
+    consoles:
+        php:console
+        db:console
 EOF
 )
 function --help {
@@ -60,6 +72,9 @@ function phpstan {
    docker compose run --rm php ./vendor/bin/phpstan ${TEST_PATH}
 }
 
+function php:console {
+    docker compose exec php php -a ;
+}
 
 function composer {
     docker run --rm --interactive                 \
