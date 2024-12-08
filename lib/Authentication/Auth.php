@@ -21,10 +21,10 @@ class Auth
 
     public static function login(string $token): void
     {
-        $user_token = UserToken::findBy(["token" => $token]);
-        if ($user_token) {
-            $_SESSION['user']['id'] = $user_token->user()->get()->id;
-            $_SESSION['user']['token'] = $user_token->token;
+        $userToken = UserToken::findBy(["token" => $token]);
+        if ($userToken) {
+            $_SESSION['user']['id'] = $userToken->user()->get()->id;
+            $_SESSION['user']['token'] = $userToken->token;
         }
     }
 
@@ -51,10 +51,10 @@ class Auth
     {
         unset($_SESSION['user']['id']);
 
-        $user_token = UserToken::findBy(["token" => Auth::token()]);
+        $userToken = UserToken::findBy(["token" => Auth::token()]);
 
-        if ($user_token) {
-            $user_token->destroy();
+        if ($userToken) {
+            $userToken->destroy();
         }
         unset($_SESSION['user']['token']);
     }

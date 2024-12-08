@@ -28,4 +28,9 @@ class Timestamp
     {
         return date('Y-m-d H:i:s', $this->time);
     }
+
+    public function getYear(): int
+    {
+        return (int) date('Y', $this->time);
+    }
 }

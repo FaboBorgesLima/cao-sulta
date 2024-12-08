@@ -15,10 +15,7 @@ abstract class ControllerTestCase extends TestCase
     {
         parent::setUp();
         require Constants::rootPath()->join('config/routes.php');
-
-        $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = '/';
-        $this->request = new Request();
     }
 
     public function tearDown(): void
@@ -27,8 +24,40 @@ abstract class ControllerTestCase extends TestCase
         unset($_SERVER['REQUEST_URI']);
     }
 
-    public function get(string $controller, string $action): string
+    /**
+     * @param array<string,mixed> $params
+     */
+    public function get(string $controller, string $action, array $params = []): string | Response
     {
+        foreach ($params as $key => $value) {
+            $_GET[$key] = $value;
+        }
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        return $this->makeRequest($controller, $action, $params);
+    }
+
+    /**
+     * @param array<string,mixed> $params
+     */
+    public function post(string $controller, string $action, array $params = []): string | Response
+    {
+        foreach ($params as $key => $value) {
+            $_POST[$key] = $value;
+        }
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        return $this->makeRequest($controller, $action, $params);
+    }
+
+    /**
+     * @param array<string,mixed> $params
+     */
+    private function makeRequest(string $controller, string $action, array $params = []): string | Response
+    {
+        foreach ($params as $key => $value) {
+            $_REQUEST[$key] = $value;
+        }
+
+        $this->request = new Request();
         $controller = new $controller();
 
         ob_start();
@@ -36,7 +65,7 @@ abstract class ControllerTestCase extends TestCase
             $res = $controller->$action($this->request);
 
             if ($res instanceof Response) {
-                $res->send();
+                return $res;
             }
 
             return ob_get_contents();

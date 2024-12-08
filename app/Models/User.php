@@ -7,6 +7,7 @@ use Core\Database\ActiveRecord\HasOne;
 use Core\Database\ActiveRecord\Model;
 use Core\Database\ActiveRecord\HasFactory;
 use Lib\CPF;
+use Lib\Random;
 use Lib\Validations;
 
 class User extends Model implements HasFactory
@@ -22,15 +23,16 @@ class User extends Model implements HasFactory
         Validations::uniqueness("email", $this);
         Validations::uniqueness("cpf", $this);
         Validations::CPF("cpf", $this);
+        Validations::email("email", $this);
+        Validations::name("name", $this);
     }
 
     public static function factory(): self
     {
-        $randInt = rand(0, PHP_INT_MAX);
         return new User([
-            "email" => "rand$randInt@rand.com",
+            "email" => Random::email(),
             "cpf" => CPF::getRandomCPF(),
-            "name" => "name$randInt"
+            "name" => Random::name()
         ]);
     }
 

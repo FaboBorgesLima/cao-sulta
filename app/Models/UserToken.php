@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Core\Database\ActiveRecord\BelongsTo;
 use Core\Database\ActiveRecord\Model;
+use Lib\Random;
 use Lib\Token;
 use Lib\Validations;
 
@@ -14,7 +15,7 @@ class UserToken extends Model
 
     public static function make(int $user_id): UserToken
     {
-        return new UserToken(["token" => Token::make(), "user_id" => $user_id]);
+        return new UserToken(["token" => Random::token(), "user_id" => $user_id]);
     }
 
     public function validates(): void
