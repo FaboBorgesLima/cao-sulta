@@ -5,15 +5,19 @@ namespace Tests\Unit\Controller;
 use Core\Constants\Constants;
 use Core\Http\Request;
 use Core\Http\Response;
+use Lib\Authentication\Auth;
 use Tests\TestCase;
 
 abstract class ControllerTestCase extends TestCase
 {
     private Request $request;
+    public bool $render = false;
 
     public function setUp(): void
     {
         parent::setUp();
+        Auth::logout();
+        $this->render = false;
         require Constants::rootPath()->join('config/routes.php');
         $_SERVER['REQUEST_URI'] = '/';
     }
@@ -61,11 +65,16 @@ abstract class ControllerTestCase extends TestCase
         $controller = new $controller();
 
         ob_start();
+
         try {
             $res = $controller->$action($this->request);
 
             if ($res instanceof Response) {
-                return $res;
+                if (!$this->render) {
+                    return $res;
+                }
+
+                $res->send();
             }
 
             return ob_get_contents();

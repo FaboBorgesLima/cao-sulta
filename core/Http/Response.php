@@ -113,6 +113,5 @@ class Response
         if ($this->file) {
             require $this->file;
         }
-        exit;
     }
 }

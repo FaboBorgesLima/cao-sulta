@@ -45,6 +45,7 @@ class Auth
         if (isset($_SESSION['user']['token'])) {
             return $_SESSION['user']['token'];
         }
+        return null;
     }
 
     public static function logout(): void

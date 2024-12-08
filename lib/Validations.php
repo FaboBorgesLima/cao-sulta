@@ -45,7 +45,7 @@ class Validations
 
     public static function name($attribute, $obj): void
     {
-        if (!$obj->$attribute) {
+        if ($obj->$attribute === null || $obj->$attribute === '') {
             return;
         }
 
@@ -88,7 +88,7 @@ class Validations
     public static function CPF($attribute, $object): void
     {
 
-        if ($object->$attribute === null) {
+        if ($object->$attribute === null || $object->$attribute === '') {
             return;
         }
 
@@ -100,6 +100,11 @@ class Validations
 
     public static function state($attribute, $object): void
     {
+
+        if ($object->$attribute === null || $object->$attribute === '') {
+            return;
+        }
+
         $states = [
             "AC",
             "AL",
@@ -139,6 +144,18 @@ class Validations
         $allStates = implode(", ", $states);
 
         $object->addError($attribute, "Deve ser uma sigla como: $allStates");
+    }
+
+    public static function crmv($attribute, $object): void
+    {
+
+        if ($object->$attribute === null || $object->$attribute === '') {
+            return;
+        }
+
+        if (!CRMV::isValid($object->$attribute)) {
+            $object->addError($attribute, "Deve ser um CRMV válido.");
+        }
     }
 
     public static function numeric($attribute, $object): void

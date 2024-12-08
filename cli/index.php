@@ -3,7 +3,6 @@
 require __DIR__ . "/../vendor/autoload.php";
 
 use Lib\StringUtils;
-use PHPUnit\TextUI\Command\Command;
 
 class CLI
 {

@@ -1,0 +1,6 @@
+<nav class="flex flex-row bg-html justify-between w-full p-4 relative before:absolute before:-z-10 before:shadow-2xl before:w-full before:h-full before:top-0 before:left-0 before:dark:shadow-gray-900">
+    <a href="<?= route("dashboard") ?>" class="button py-2 px-4">Dashboard</a>
+    <?php if (isset($userId)): ?>
+        <a href="<?= route("user.show", ["id" => $userId]) ?>" class="button py-2 px-4">Profile</a>
+    <?php endif; ?>
+</nav>
