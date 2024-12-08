@@ -67,7 +67,6 @@ abstract class ControllerTestCase extends TestCase
         ob_start();
 
         try {
-
             $res = $controller->$action($this->request);
 
             if ($res instanceof Response) {
