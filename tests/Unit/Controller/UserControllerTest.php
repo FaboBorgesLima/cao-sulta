@@ -12,6 +12,21 @@ use Tests\Unit\Controller\ControllerTestCase;
 
 class UserControllerTest extends ControllerTestCase
 {
+    public function test_show(): void
+    {
+        $user = User::factory();
+
+        $user->save();
+
+        $this->render = true;
+
+        $view = $this->get(UserController::class, "show", ["id" => $user->id]);
+
+        $this->assertIsString($view);
+
+        $this->assertStringContainsString("<title>" . $user->name . "</title>", $view);
+    }
+
     public function test_create(): void
     {
         $res = $this->get(UserController::class, "create");

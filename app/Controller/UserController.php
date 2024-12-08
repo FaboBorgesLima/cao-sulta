@@ -10,6 +10,37 @@ use Lib\Authentication\Auth;
 
 class UserController extends Controller
 {
+    public function show(Request $request): Response
+    {
+        $user = User::findById((int) $request->getParam("id"));
+
+        $loggedUser = Auth::user();
+
+        $data = [
+            "name" => "not found",
+            "isVet" => false,
+            "isSame" => false,
+        ];
+
+        if (!$user) {
+            return Response::render("user/show", $data);
+        }
+
+        $data["name"] = $user->name;
+        $data["isVet"] = $user->isVet();
+
+        if (!$loggedUser) {
+            return Response::render("user/show", $data);
+        }
+
+
+        if ($user->id == $loggedUser->id) {
+            $data["isSame"] = true;
+        }
+
+        return Response::render("user/show", $data);
+    }
+
     public function create(): Response
     {
         return Response::render("user/create");
@@ -38,17 +69,13 @@ class UserController extends Controller
     public function dashboard(): Response
     {
         $user = Auth::user();
-        /** @var null|\App\Models\Vet */
-        $vet = $user->vet()->get();
-        $crmvs = [];
-        if ($vet) {
-            $crmvs = $vet->CRMVRegisters()->get();
-        }
+        $vet = Auth::isVet();
+        $userId = $user->id;
 
         return Response::render("user/dashboard", [
             "name" => $user->name,
+            "userId" => $userId,
             "isVet" => (bool) $vet,
-            "crmvs" => $crmvs
         ]);
     }
 }

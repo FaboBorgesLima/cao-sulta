@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <?php
+    require __DIR__ . "/../Components/head.phtml";
+    ?>
+    <title><?= $name ?></title>
+
+</head>
+
+<body>
+    <?php require __DIR__ . "/../Components/nav.phtml" ?>
+    <main class="grow my-4 flex justify-center items-center">
+        <div class="card p-4 flex flex-col gap-4">
+            <h1 class="text-2xl bold "><?= $name ?></h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-4">
+                    <span class="text-center"><?= $isVet ? "veterinary" : "tutor" ?></span>
+                </div>
+            </div>
+            <a href="<?= route("auth.logout") ?>" class="button text-center py-2 px-4 ">Logout</a>
+        </div>
+    </main>
+
+</body>
+
+</html>

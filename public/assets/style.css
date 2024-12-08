@@ -1,19 +1,36 @@
 @tailwind base;
 @layer components {
+  .bg-html {
+    @apply bg-gray-50 dark:bg-gray-950;
+  }
+  .card-shadow {
+    @apply shadow-2xl dark:shadow-gray-800;
+  }
   .card {
-    @apply shadow-2xl rounded-2xl;
+    @apply rounded-2xl card-shadow bg-html;
   }
   .button {
-    @apply rounded-2xl bg-blue-600/75 text-gray-50 shadow-2xl font-bold transition-all duration-300 hover:bg-blue-600;
+    @apply rounded-full bg-blue-600/90 text-gray-50 card-shadow font-bold transition-all duration-300 hover:bg-blue-600;
   }
   .form-label {
     @apply flex flex-col gap-4 text-center w-full font-bold;
   }
   .form-input {
-    @apply text-center rounded-2xl font-normal;
+    @apply text-center rounded-2xl font-normal bg-gray-900/5 dark:bg-gray-50/10;
   }
   .form-card {
     @apply w-1/2 mx-auto p-4 flex flex-col items-center gap-4 card;
+  }
+}
+@layer base {
+  html * {
+    @apply dark:text-gray-50;
+  }
+  html {
+    @apply bg-html;
+  }
+  body {
+    @apply flex flex-col min-h-screen;
   }
 }
 @tailwind components;
