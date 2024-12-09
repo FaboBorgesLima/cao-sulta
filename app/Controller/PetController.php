@@ -104,7 +104,7 @@ class PetController extends Controller
 
         $pet->name = $request->getParam("name");
 
-        if (!$pet->validates()) {
+        if (!$pet->isValid()) {
             return Response::render("pet/update-delete", [
                 "id" => $pet->id,
                 "name" => $pet->name,
