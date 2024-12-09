@@ -11,8 +11,8 @@ Route::get("/", [StaticPagesController::class, "home"])->name("home");
 Route::get("/register", [StaticPagesController::class, "register"])->name("register");
 
 // ---------- User
-Route::get("/user/{id}", [UserController::class, "show"])->name("user.show");
 Route::get("/user/create", [UserController::class, "create"])->name("user.create");
+Route::get("/user/{id}", [UserController::class, "show"])->name("user.show");
 Route::post("/user/store", [UserController::class, "store"])->name("user.store");
 
 // ---------- Auth
