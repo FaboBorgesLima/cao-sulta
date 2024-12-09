@@ -102,13 +102,13 @@ class PetController extends Controller
             return $res;
         }
 
-        $attributes = [
-            "name" => $request->getParam("name"),
-        ];
+        $pet->name = $request->getParam("name");
 
-        if (!$pet->update($attributes)) {
+        if (!$pet->validates()) {
             return Response::render("pet/update-delete", ["errors" => $pet->getAllErrors()]);
         }
+
+        $pet->save();
 
         return Response::redirectTo(route("user.pets", ["id" => $request->user()->id]));
     }
