@@ -69,7 +69,7 @@ class PetController extends Controller
             return Response::redirectTo(route("user.pets", ["id" => $user->id]));
         }
 
-        return Response::render("pet.create", ["errors" => $pet->getAllErrors()]);
+        return Response::render("pet/create", ["errors" => $pet->getAllErrors()]);
     }
 
     public function update(Request $request): Response
