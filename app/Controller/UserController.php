@@ -19,23 +19,20 @@ class UserController extends Controller
         $data = [
             "name" => "not found",
             "isVet" => false,
-            "isSame" => false,
+            "userId" => $request->getParam("id"),
+            "loggedUserId" => null
         ];
 
         if (!$user) {
             return Response::render("user/show", $data);
         }
 
+        $data["loggedUserId"] = $user->id;
         $data["name"] = $user->name;
         $data["isVet"] = $user->isVet();
 
         if (!$loggedUser) {
             return Response::render("user/show", $data);
-        }
-
-
-        if ($user->id == $loggedUser->id) {
-            $data["isSame"] = true;
         }
 
         return Response::render("user/show", $data);
@@ -70,11 +67,11 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $vet = Auth::isVet();
-        $userId = $user->id;
+        $loggedUserId = $user->id;
 
         return Response::render("user/dashboard", [
             "name" => $user->name,
-            "userId" => $userId,
+            "loggedUserId" => $loggedUserId,
             "isVet" => (bool) $vet,
         ]);
     }

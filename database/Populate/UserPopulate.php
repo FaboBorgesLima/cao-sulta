@@ -14,6 +14,6 @@ class UserPopulate
             $user->save();
         }
 
-        echo "user populated\n";
+        echo User::class . " populated\n";
     }
 }

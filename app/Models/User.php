@@ -50,4 +50,9 @@ class User extends Model implements HasFactory
     {
         return (bool) $this->vet();
     }
+
+    public function pets(): HasMany
+    {
+        return $this->hasMany(Pet::class, "user_id");
+    }
 }

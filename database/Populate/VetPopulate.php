@@ -4,6 +4,7 @@ namespace Database\Populate;
 
 use App\Models\CRMVRegister;
 use App\Models\User;
+use App\Models\Vet;
 
 class VetPopulate
 {
@@ -20,6 +21,6 @@ class VetPopulate
             $vet->save();
         }
 
-        echo "vet populated\n";
+        echo Vet::class . " populated\n";
     }
 }
