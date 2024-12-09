@@ -2,6 +2,9 @@
 
 namespace Core\Http;
 
+use App\Models\User;
+use Lib\Authentication\Auth;
+
 class Request
 {
     private string $method;
@@ -13,12 +16,15 @@ class Request
     /** @var array<string, string> */
     private array $headers;
 
+    private ?User $user;
+
     public function __construct()
     {
         $this->method = $_REQUEST['_method'] ?? $_SERVER['REQUEST_METHOD'];
         $this->uri = $_SERVER['REQUEST_URI'];
         $this->params = $_REQUEST;
         $this->headers = function_exists('getallheaders') ? getallheaders() : [];
+        $this->user = Auth::user();
     }
 
     public function getMethod(): string
@@ -57,5 +63,10 @@ class Request
     public function getParam(string $key, mixed $default = null): mixed
     {
         return $this->params[$key] ?? $default;
+    }
+
+    public function user(): ?User
+    {
+        return $this->user;
     }
 }

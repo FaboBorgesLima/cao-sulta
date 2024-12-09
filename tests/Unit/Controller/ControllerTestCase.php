@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\Controller;
 
+use App\Models\User;
+use App\Models\UserToken;
 use Core\Constants\Constants;
 use Core\Http\Request;
 use Core\Http\Response;

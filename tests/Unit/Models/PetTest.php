@@ -20,7 +20,7 @@ class PetTest extends TestCase
         // create
         $this->assertTrue($pet->save());
 
-        // read 
+        // read
 
         $this->assertInstanceOf(Pet::class, Pet::findById($pet->id));
 
