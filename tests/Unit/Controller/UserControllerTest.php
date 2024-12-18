@@ -14,9 +14,7 @@ class UserControllerTest extends ControllerTestCase
 {
     public function test_show(): void
     {
-        $user = User::factory();
-
-        $user->save();
+        $user = $this->login();
 
         $this->render = true;
 
@@ -25,6 +23,8 @@ class UserControllerTest extends ControllerTestCase
         $this->assertIsString($view);
 
         $this->assertStringContainsString("<title>" . $user->name . "</title>", $view);
+
+        $this->assertStringContainsString("tutor", $view);
     }
 
     public function test_create(): void

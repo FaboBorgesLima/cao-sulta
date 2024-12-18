@@ -30,6 +30,22 @@ abstract class ControllerTestCase extends TestCase
         unset($_SERVER['REQUEST_URI']);
     }
 
+    public function login(): User
+    {
+        $user = User::factory();
+
+        $user->save();
+
+        $token = UserToken::make($user->id);
+
+        $token->save();
+
+        Auth::login($token->token);
+
+        return $user;
+    }
+
+
     /**
      * @param array<string,mixed> $params
      */

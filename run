@@ -46,7 +46,7 @@ function -h {
 
 function test {
    TEST_PATH="${@:-tests}"
-   docker compose run --rm php ./vendor/bin/phpunit --color ${TEST_PATH}
+   docker compose run --rm php ./vendor/bin/phpunit --testdox --color ${TEST_PATH}
 }
 
 function up {

@@ -14,7 +14,7 @@ class VetPopulate
 
         for ($i = 0; $i < (int)(count($users) / 2); $i++) {
             /** @var \App\Models\Vet */
-            $vet = $users[$i]->vet()->new([]);
+            $vet = $users[$i * 2]->vet()->new([]);
 
             $vet->attachCRMVRegister(new CRMVRegister(["crmv" => "202200$i", "state" => "PR"]));
 

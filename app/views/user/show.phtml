@@ -19,7 +19,9 @@
                     <span class="text-center"><?= $isVet ? "veterinary" : "tutor" ?></span>
                 </div>
             </div>
-            <a href="<?= route("auth.logout") ?>" class="button text-center py-2 px-4 ">Logout</a>
+            <?php if ($loggedUserId == $userId): ?>
+                <a href="<?= route("auth.logout") ?>" class="button text-center py-2 px-4 ">Logout</a>
+            <?php endif; ?>
         </div>
     </main>
 
