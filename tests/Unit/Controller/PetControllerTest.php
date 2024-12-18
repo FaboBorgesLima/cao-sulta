@@ -5,29 +5,11 @@ namespace Tests\Unit\Controller;
 use App\Controller\PetController;
 use App\Models\Pet;
 use App\Models\User;
-use App\Models\UserToken;
-use Core\Http\Response;
-use Lib\Authentication\Auth;
 use Lib\Random;
 use Tests\Unit\Controller\ControllerTestCase;
 
 class PetControllerTest extends ControllerTestCase
 {
-    public function login(): User
-    {
-        $user = User::factory();
-
-        $user->save();
-
-        $token = UserToken::make($user->id);
-
-        $token->save();
-
-        Auth::login($token->token);
-
-        return $user;
-    }
-
     public function test_all(): void
     {
         $user = User::factory();

@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Models;
 
+use App\Models\CRMVRegister;
 use App\Models\User;
 use Lib\CPF;
 use Lib\Random;
@@ -45,6 +46,25 @@ class UserTest extends TestCase
 
             $this->assertTrue($user->save());
         }
+    }
+
+    public function test_is_vet_method(): void
+    {
+        $user = User::factory();
+
+        $user->save();
+
+        $this->assertFalse($user->isVet());
+        /** @var \App\Models\Vet */
+        $vet = $user->vet()->new([]);
+
+        $crmvRegister = new CRMVRegister(["crmv" => "2024001", "state" => "SP"]);
+
+        $vet->attachCRMVRegister($crmvRegister);
+
+        $vet->save();
+
+        $this->assertTrue($user->isVet());
     }
 
     public function test_cannot_put_wrong_name(): void

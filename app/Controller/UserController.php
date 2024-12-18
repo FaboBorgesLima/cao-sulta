@@ -27,7 +27,7 @@ class UserController extends Controller
             return Response::render("user/show", $data);
         }
 
-        $data["loggedUserId"] = $user->id;
+        $data["loggedUserId"] = $loggedUser->id;
         $data["name"] = $user->name;
         $data["isVet"] = $user->isVet();
 

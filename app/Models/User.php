@@ -48,7 +48,7 @@ class User extends Model implements HasFactory
 
     public function isVet(): bool
     {
-        return (bool) $this->vet();
+        return (bool) $this->vet()->get();
     }
 
     public function pets(): HasMany
