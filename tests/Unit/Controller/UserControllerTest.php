@@ -15,7 +15,7 @@ class UserControllerTest extends ControllerTestCase
 {
     public function test_show(): void
     {
-        // can show without being logged 
+        // can show without being logged
         $user = User::factory();
 
         $user->save();
