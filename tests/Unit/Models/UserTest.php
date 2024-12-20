@@ -107,6 +107,27 @@ class UserTest extends TestCase
         $user->email = "email@email.com";
 
         $this->assertTrue($user->save());
+
+        $user2 = User::factory();
+
+        $user2->email = "email@email.com";
+
+        $this->assertFalse($user2->save());
+    }
+
+    public function test_cannot_have_same_email(): void
+    {
+
+        $user = User::factory();
+
+        $this->assertTrue($user->save());
+        $this->assertTrue($user->save());
+
+        $user2 = User::factory();
+
+        $user2->email = $user->email;
+
+        $this->assertFalse($user2->save());
     }
 
     public function test_cannot_put_wrong_cpf(): void
@@ -130,5 +151,19 @@ class UserTest extends TestCase
         $user->cpf = Random::CPF();
 
         $this->assertTrue($user->save());
+    }
+
+    public function test_cannot_have_same_cpf(): void
+    {
+        $user = User::factory();
+
+        $this->assertTrue($user->save());
+        $this->assertTrue($user->save());
+
+        $user2 = User::factory();
+
+        $user2->cpf = $user->cpf;
+
+        $this->assertFalse($user2->save());
     }
 }

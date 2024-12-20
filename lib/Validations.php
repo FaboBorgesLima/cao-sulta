@@ -183,6 +183,7 @@ class Validations
         $sql = <<<SQL
             SELECT id FROM {$table} WHERE {$conditions};
         SQL;
+
         if (!$object->newRecord()) {
             $sql = <<<SQL
                 SELECT id FROM {$table} WHERE {$conditions} AND NOT id = :id;
