@@ -11,6 +11,7 @@ class HasMany
         private string $related,
         private string $foreignKey
     ) {
+        /** */
     }
 
     /**
