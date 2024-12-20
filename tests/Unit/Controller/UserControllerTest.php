@@ -3,6 +3,7 @@
 namespace Tests\Unit\Controller;
 
 use App\Controller\UserController;
+use App\Models\CRMVRegister;
 use App\Models\User;
 use App\Models\UserToken;
 use Core\Http\Response;
@@ -14,7 +15,10 @@ class UserControllerTest extends ControllerTestCase
 {
     public function test_show(): void
     {
-        $user = $this->login();
+        // can show without being logged 
+        $user = User::factory();
+
+        $user->save();
 
         $this->render = true;
 
@@ -25,6 +29,36 @@ class UserControllerTest extends ControllerTestCase
         $this->assertStringContainsString("<title>" . $user->name . "</title>", $view);
 
         $this->assertStringContainsString("tutor", $view);
+
+        // show when logged
+
+        $user = $this->login();
+
+        $view = $this->get(UserController::class, "show", ["id" => $user->id]);
+
+        $this->assertIsString($view);
+
+        $this->assertStringContainsString("<title>" . $user->name . "</title>", $view);
+
+        $this->assertStringContainsString("tutor", $view);
+
+        $this->assertStringNotContainsString("veterinary", $view);
+
+        // show that user is vet
+        /** @var \App\Models\Vet */
+        $vet = $user->vet()->new([]);
+
+        $vet->attachCRMVRegister(new CRMVRegister(["state" => "SP", "crmv" => "2024123"]));
+
+        $this->assertTrue($vet->save());
+
+        $view = $this->get(UserController::class, "show", ["id" => $user->id]);
+
+        $this->assertIsString($view);
+
+        $this->assertStringContainsString("<title>" . $user->name . "</title>", $view);
+
+        $this->assertStringContainsString("veterinary", $view);
     }
 
     public function test_create(): void
