@@ -16,6 +16,7 @@ class CPFTest extends TestCase
         $this->assertFalse(CPF::isValid("0 279920717"));
         $this->assertFalse(CPF::isValid("0b279920717"));
     }
+
     public function test_get_random_CPF(): void
     {
         $this->assertTrue(CPF::isValid(CPF::getRandomCPF()));
