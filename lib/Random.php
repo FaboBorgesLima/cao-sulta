@@ -50,8 +50,12 @@ class Random
             Random::alfabeticString(5),
             Random::alfabeticString(3),
             Random::alfabeticString(2)
-        ]);
-        ;
+        ]);;
+    }
+
+    public static function state(): string
+    {
+        return static::itemFromArray(State::getStates());
     }
 
     public static function name(): string

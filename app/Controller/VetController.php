@@ -7,12 +7,13 @@ use App\Models\User;
 use Core\Http\Controllers\Controller;
 use Core\Http\Request;
 use Core\Http\Response;
+use Lib\State;
 
 class VetController extends Controller
 {
     public function create(): Response
     {
-        return Response::render("vet/create");
+        return Response::render("vet/create", ["states" => State::getStates()]);
     }
 
     public function store(Request $request): Response

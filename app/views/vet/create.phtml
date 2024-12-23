@@ -54,7 +54,11 @@
                 <?php endif; ?>
                 <label class="form-label">
                     State
-                    <input name="state" type="text" placeholder="state" class="form-input">
+                    <select name="state" type="text" placeholder="state" class="form-input">
+                        <?php foreach ($states as $state): ?>
+                            <option value="<?= $state ?>"><?= $state ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </label>
                 <?php
                 if (isset($errors["state"])):

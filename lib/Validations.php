@@ -105,43 +105,11 @@ class Validations
             return;
         }
 
-        $states = [
-            "AC",
-            "AL",
-            "AP",
-            "AM",
-            "BA",
-            "CE",
-            "DF",
-            "ES",
-            "GO",
-            "MA",
-            "MT",
-            "MS",
-            "MG",
-            "PA",
-            "PB",
-            "PR",
-            "PE",
-            "PI",
-            "RJ",
-            "RN",
-            "RS",
-            "RO",
-            "RR",
-            "SC",
-            "SP",
-            "SE",
-            "TO"
-        ];
-
-        foreach ($states as $state) {
-            if ($object->$attribute == $state) {
-                return;
-            }
+        if (State::isState($object->$attribute)) {
+            return;
         }
 
-        $allStates = implode(", ", $states);
+        $allStates = implode(", ", State::getStates());
 
         $object->addError($attribute, "Deve ser uma sigla como: $allStates");
     }
