@@ -35,6 +35,7 @@ class VetController extends Controller
 
         if (!$user->isValid() || !$crmv->isValid()) {
             return Response::render("vet/create", [
+                "states" => State::getStates(),
                 "errors" => array_merge(
                     $user->getAllErrors(),
                     $crmv->getAllErrors()
