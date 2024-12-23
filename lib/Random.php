@@ -50,7 +50,8 @@ class Random
             Random::alfabeticString(5),
             Random::alfabeticString(3),
             Random::alfabeticString(2)
-        ]);;
+        ]);
+        ;
     }
 
     public static function state(): string
