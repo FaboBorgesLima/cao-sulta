@@ -54,6 +54,11 @@ class Random
         ;
     }
 
+    public static function state(): string
+    {
+        return static::itemFromArray(State::getStates());
+    }
+
     public static function name(): string
     {
         return implode(" ", [
