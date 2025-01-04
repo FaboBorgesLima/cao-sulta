@@ -12,41 +12,37 @@ class PetController extends Controller
 {
     public function all(Request $request): Response
     {
-        $viewData = [
-            "loggedUserId" => null,
+        $view_data = [
+            "logged_user_id" => null,
             "pets" => [],
             "name" => "not found",
-            "userId" => $request->getParam("id")
+            "user_id" => $request->getParam("id")
         ];
 
-        $loggedUser = $request->user();
+        $logged_user = $request->user();
 
-        if ($loggedUser) {
-            $viewData["loggedUserId"] = $loggedUser->id;
+        if ($logged_user) {
+            $view_data["logged_user_id"] = $logged_user->id;
         }
 
         $user = User::findById($request->getParam("id"));
 
         if (!$user) {
-            return Response::render("pet/all", $viewData);
+            return Response::render("pet/all", $view_data);
         }
-        $viewData["name"] = $user->name;
 
-        $viewData["pets"] = $user->pets()->get();
+        $view_data["name"] = $user->name;
+
+        $view_data["pets"] = $user->pets()->get();
 
         array_map(function ($pet) {
             return [
                 "name" => $pet->name,
                 "id" => $pet->id
             ];
-        }, $viewData["pets"]);
+        }, $view_data["pets"]);
 
-        return Response::render("pet/all", $viewData);
-    }
-
-    public function show(): void
-    {
-        echo "PetController";
+        return Response::render("pet/all", $view_data);
     }
 
     public function create(): Response

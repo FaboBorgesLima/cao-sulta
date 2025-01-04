@@ -14,13 +14,13 @@ class UserController extends Controller
     {
         $user = User::findById((int) $request->getParam("id"));
 
-        $loggedUser = Auth::user();
+        $logged_user = Auth::user();
 
         $data = [
             "name" => "not found",
-            "isVet" => false,
-            "userId" => $request->getParam("id"),
-            "loggedUserId" => null
+            "is_vet" => false,
+            "user_id" => $request->getParam("id"),
+            "logged_user_id" => null
         ];
 
         if (!$user) {
@@ -28,13 +28,13 @@ class UserController extends Controller
         }
 
         $data["name"] = $user->name;
-        $data["isVet"] = $user->isVet();
+        $data["is_vet"] = $user->isVet();
 
-        if ($loggedUser) {
-            $data["loggedUserId"] = $loggedUser->id;
+        if ($logged_user) {
+            $data["logged_user_id"] = $logged_user->id;
         }
 
-        if (!$loggedUser) {
+        if (!$logged_user) {
             return Response::render("user/show", $data);
         }
 
@@ -70,12 +70,12 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $vet = Auth::isVet();
-        $loggedUserId = $user->id;
+        $logged_user_id = $user->id;
 
         return Response::render("user/dashboard", [
             "name" => $user->name,
-            "loggedUserId" => $loggedUserId,
-            "isVet" => (bool) $vet,
+            "logged_user_id" => $logged_user_id,
+            "is_vet" => (bool) $vet,
         ]);
     }
 }
