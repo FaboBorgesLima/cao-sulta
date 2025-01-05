@@ -174,7 +174,7 @@ class UserTest extends TestCase
         $this->assertTrue($user->save());
 
         $this->assertArrayIsEqualToArrayIgnoringListOfKeys(
-            ['updated_at', "created_at", "name", "cpf"],
+            ['updated_at', "created_at", "name", "cpf", 'id'],
             array_keys($user->toArray()),
             ["just-for-phpstan"]
         );

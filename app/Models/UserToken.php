@@ -5,7 +5,6 @@ namespace App\Models;
 use Core\Database\ActiveRecord\BelongsTo;
 use Core\Database\ActiveRecord\Model;
 use Lib\Random;
-use Lib\Token;
 use Lib\Validations;
 
 class UserToken extends Model
