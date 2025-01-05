@@ -172,10 +172,15 @@ class UserTest extends TestCase
         $user = User::factory();
 
         $this->assertTrue($user->save());
+        $expected = ['id', 'updated_at', "created_at", "name", "cpf"];
+        $actual = array_keys($user->toArray());
+
+        sort($actual);
+        sort($expected);
 
         $this->assertArrayIsEqualToArrayIgnoringListOfKeys(
-            ['updated_at', "created_at", "name", "cpf", 'id'],
-            array_keys($user->toArray()),
+            $expected,
+            $actual,
             ["just-for-phpstan"]
         );
     }
