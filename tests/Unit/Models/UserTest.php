@@ -166,4 +166,39 @@ class UserTest extends TestCase
 
         $this->assertFalse($user2->save());
     }
+
+    public function test_to_array_works(): void
+    {
+        $user = User::factory();
+
+        $this->assertTrue($user->save());
+
+        $this->assertArrayIsEqualToArrayIgnoringListOfKeys(
+            ['updated_at', "created_at", "name", "cpf"],
+            array_keys($user->toArray()),
+            ["just-for-phpstan"]
+        );
+    }
+
+    public function test_to_array_can_send_email(): void
+    {
+        $user = User::factory();
+
+        $this->assertTrue($user->save());
+
+        $this->assertArrayNotHasKey("email", $user->toArray());
+
+        $this->assertArrayHasKey("email", $user->makeVisible("email")->toArray());
+    }
+
+    public function test_can_hidde_attributtes(): void
+    {
+        $user = User::factory();
+
+        $this->assertTrue($user->save());
+
+        $this->assertArrayHasKey("cpf", $user->toArray());
+
+        $this->assertArrayNotHasKey("cpf", $user->makeHidden("cpf")->toArray());
+    }
 }

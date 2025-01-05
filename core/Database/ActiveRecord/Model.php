@@ -29,11 +29,19 @@ abstract class Model
     /** @var array<int, string> */
     protected static array $columns = [];
 
+    /** @var array<int, string> */
+    protected static array $hidden = [];
+
+    /** @var array<string,mixed> */
+    private array $hide = [];
+
     /**
      * @param array<string, mixed> $params
      */
     public function __construct($params = [])
     {
+        $this->hide = array_flip(static::$hidden);
+
         // Initialize attributes with null from database columns
         foreach (static::$columns as $column) {
             $this->attributes[$column] = null;
@@ -42,6 +50,43 @@ abstract class Model
         foreach ($params as $property => $value) {
             $this->__set($property, $value);
         }
+    }
+
+    /* ------------------- SERIALIZATION METHODS ------------------- */
+
+    /**
+     * @return array<string,mixed>
+     */
+    public function toArray(): array
+    {
+        /** @var array<string,mixed> */
+        $arr = [
+            "updated_at" => $this->updated_at,
+            "created_at" => $this->created_at
+        ];
+
+        foreach ($this->attributes as $name => $value) {
+
+            if (!key_exists($name, $this->hide)) {
+                $arr[$name] = $value;
+            }
+        }
+
+        return $arr;
+    }
+
+    public function makeVisible(string $attribute): self
+    {
+        unset($this->hide[$attribute]);
+
+        return $this;
+    }
+
+    public function makeHidden(string $attribute): self
+    {
+        $this->hide[$attribute] = null;
+
+        return $this;
     }
 
     /* ------------------- MAGIC METHODS ------------------- */

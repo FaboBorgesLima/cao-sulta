@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Core\Database\ActiveRecord\BelongsTo;
 use Core\Database\ActiveRecord\Model;
+use Lib\CRMV;
 use Lib\Validations;
 
 class CRMVRegister extends Model
@@ -19,6 +20,15 @@ class CRMVRegister extends Model
         Validations::state("state", $this);
         Validations::crmv("crmv", $this);
         Validations::uniqueness(["crmv", "state"], $this);
+    }
+
+    public function getYear(): ?int
+    {
+        if (property_exists($this, "crmv")) {
+            return CRMV::getYear($this->crmv);
+        }
+
+        return null;
     }
 
     public function vet(): BelongsTo
