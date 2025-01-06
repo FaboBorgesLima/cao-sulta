@@ -12,17 +12,17 @@
         require(__DIR__ . "/../Components/nav.phtml");
         ?>
         <div class="container mx-auto grow flex flex-col gap-4">
-            <h1 class="font-bold text-2xl"><?= $name ?> Pets</h1>
+            <h1 class="font-bold text-2xl"><?= $profile["name"] ?> Pets</h1>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <?php foreach ($pets as $pet): ?>
-                    <a href="<?= $logged_user_id == $user_id ? route("pet.update", ["id" => $pet->id]) : "" ?>" class="<?= $logged_user_id == $user_id ? "" : "pointer-events-none" ?> card p-4 flex flex-col hover:bg-blue-500/15 transition-all duration-300">
+                    <a href="<?= isset($user) && $user["id"] == $profile["id"] ? route("pet.update", ["id" => $pet->id]) : "" ?>" class="<?= isset($user) && $user["id"] == $profile["id"] ? "" : "pointer-events-none" ?> card p-4 flex flex-col hover:bg-blue-500/15 transition-all duration-300">
                         <h2 class="font-bold"><?= $pet->name ?></h2>
-                        <?php if ($logged_user_id == $user_id): ?>
+                        <?php if (isset($user) && $user["id"] == $profile["id"]): ?>
                             <p>Edit or Delete</p>
                         <?php endif; ?>
                     </a>
                 <?php endforeach; ?>
-                <?php if ($logged_user_id == $user_id): ?>
+                <?php if (isset($user) && $user["id"] == $profile["id"]): ?>
                     <a href="<?= route("pet.create") ?>" class="card p-4 flex flex-col justify-center hover:bg-blue-500/15 transition-all duration-300">
                         <h2 class="font-bold">New Pet</h2>
                     </a>

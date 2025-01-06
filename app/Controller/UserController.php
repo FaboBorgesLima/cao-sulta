@@ -12,33 +12,24 @@ class UserController extends Controller
 {
     public function show(Request $request): Response
     {
-        $user = User::findById((int) $request->getParam("id"));
-
-        $logged_user = Auth::user();
+        $profile = User::findById((int) $request->getParam("id"));
 
         $data = [
-            "name" => "not found",
+            "profile" => [
+                "name" => "not found",
+                "id" => $request->getParam("id"),
+            ],
             "is_vet" => false,
-            "user_id" => $request->getParam("id"),
-            "logged_user_id" => null
         ];
 
-        if (!$user) {
-            return Response::render("user/show", $data);
+        if (!$profile) {
+            return Response::render("user/show", $data)->withUser();
         }
 
-        $data["name"] = $user->name;
-        $data["is_vet"] = $user->isVet();
+        $data["is_vet"] = $profile->isVet();
+        $data["profile"] = $profile->toArray();
 
-        if ($logged_user) {
-            $data["logged_user_id"] = $logged_user->id;
-        }
-
-        if (!$logged_user) {
-            return Response::render("user/show", $data);
-        }
-
-        return Response::render("user/show", $data);
+        return Response::render("user/show", $data)->withUser();
     }
 
     public function create(): Response
@@ -68,14 +59,10 @@ class UserController extends Controller
 
     public function dashboard(): Response
     {
-        $user = Auth::user();
         $vet = Auth::isVet();
-        $logged_user_id = $user->id;
 
         return Response::render("user/dashboard", [
-            "name" => $user->name,
-            "logged_user_id" => $logged_user_id,
             "is_vet" => (bool) $vet,
-        ]);
+        ])->withUser();
     }
 }

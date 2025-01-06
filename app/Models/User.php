@@ -14,7 +14,7 @@ class User extends Model implements HasFactory
 {
     protected static string $table = "users";
     protected static array $columns = ["name", "email", "cpf"];
-    protected static array $hidden = ["email"];
+    protected static array $hidden = ["email", "cpf"];
 
     public function validates(): void
     {

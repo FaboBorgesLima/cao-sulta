@@ -172,7 +172,7 @@ class UserTest extends TestCase
         $user = User::factory();
 
         $this->assertTrue($user->save());
-        $expected = ['id', 'updated_at', "created_at", "name", "cpf"];
+        $expected = ['id', 'updated_at', "created_at", "name"];
         $actual = array_keys($user->toArray());
 
         sort($actual);
@@ -202,8 +202,8 @@ class UserTest extends TestCase
 
         $this->assertTrue($user->save());
 
-        $this->assertArrayHasKey("cpf", $user->toArray());
+        $this->assertArrayHasKey("name", $user->toArray());
 
-        $this->assertArrayNotHasKey("cpf", $user->makeHidden("cpf")->toArray());
+        $this->assertArrayNotHasKey("name", $user->makeHidden("name")->toArray());
     }
 }
