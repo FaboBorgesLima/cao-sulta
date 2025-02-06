@@ -36,11 +36,17 @@ class User extends Model
         ]);
     }
 
+    /**
+     * @return HasMany<UserToken>
+     */
     public function userTokens(): HasMany
     {
         return $this->hasMany(UserToken::class, "user_id");
     }
 
+    /**
+     * @return HasOne<Vet>
+     */
     public function vet(): HasOne
     {
         return $this->hasOne(Vet::class, "user_id");
@@ -51,6 +57,9 @@ class User extends Model
         return (bool) $this->vet()->get();
     }
 
+    /**
+     * @return HasMany<Pet>
+     */
     public function pets(): HasMany
     {
         return $this->hasMany(Pet::class, "user_id");

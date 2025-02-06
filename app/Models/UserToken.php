@@ -23,6 +23,9 @@ class UserToken extends Model
         Validations::notEmpty("user_id", $this);
     }
 
+    /**
+     * @return BelongsTo<User>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, "user_id");

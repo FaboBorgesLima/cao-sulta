@@ -12,9 +12,8 @@ class BelongsToMany
 {
     /**
      * 
-     * @param T $model
-     * @param string $related
-     * @param string $foreignKey
+     * @param Model $model
+     * @param class-string<T> $related
      */
     public function __construct(
         private Model  $model,
@@ -27,7 +26,7 @@ class BelongsToMany
     }
 
     /**
-     * @return array<Model>
+     * @return array<T>
      */
     public function get()
     {

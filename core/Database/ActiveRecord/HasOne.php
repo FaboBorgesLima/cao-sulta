@@ -2,8 +2,14 @@
 
 namespace Core\Database\ActiveRecord;
 
+/**
+ * @template T of Model 
+ */
 class HasOne
 {
+    /**
+     * @param class-string<T> $related
+     */
     public function __construct(
         private Model $model,
         private string $related,
@@ -12,6 +18,10 @@ class HasOne
         //
     }
 
+    /**
+     * 
+     * @return T 
+     */
     public function get(): ?Model
     {
         return $this->related::findBy([$this->foreignKey, $this->model->id]);
@@ -19,6 +29,7 @@ class HasOne
 
     /**
      * @param array<string, mixed> $params
+     * @return T
      */
     public function new(array $params = []): Model
     {

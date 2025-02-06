@@ -62,11 +62,17 @@ class Vet extends Model
         return true;
     }
 
+    /**
+     * @return BelongsTo<User>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, "user_id");
     }
 
+    /**
+     * @return HasMany<CRMVRegister>
+     */
     public function CRMVRegisters(): HasMany
     {
         return $this->hasMany(CRMVRegister::class, "vet_id");

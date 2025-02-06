@@ -4,8 +4,14 @@ namespace Core\Database\ActiveRecord;
 
 use Lib\Paginator;
 
+/**
+ * @template T of Model 
+ */
 class HasMany
 {
+    /**
+     * @param class-string<T> $related
+     */
     public function __construct(
         private Model $model,
         private string $related,

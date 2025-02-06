@@ -478,17 +478,32 @@ abstract class Model
         return new BelongsTo($this, $related, $foreignKey);
     }
 
+    /**
+     * @template T of Model 
+     * @param class-string<T> $related
+     * @return HasMany<T>
+     */
     public function hasMany(string $related, string $foreignKey): HasMany
     {
         return new HasMany($this, $related, $foreignKey);
     }
 
+    /**
+     * @template T of Model 
+     * @param class-string<T> $related
+     * @return HasOne<T>
+     */
     public function hasOne(string $related, string $foreignKey): HasOne
     {
         return new HasOne($this, $related, $foreignKey);
     }
 
-    public function BelongsToMany(string $related, string $pivot_table, string $from_foreign_key, string $to_foreign_key): BelongsToMany
+    /**
+     * @template T of Model 
+     * @param class-string<T> $related
+     * @return BelongsToMany<T>
+     */
+    public function belongsToMany(string $related, string $pivot_table, string $from_foreign_key, string $to_foreign_key): BelongsToMany
     {
         return new BelongsToMany($this, $related, $pivot_table, $from_foreign_key, $to_foreign_key);
     }
