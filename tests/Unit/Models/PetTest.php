@@ -50,7 +50,7 @@ class PetTest extends TestCase
 
         $user->save();
 
-        $pet = new Pet(["user_id" => $user->id, "name" => Random::name()]);
+        $pet = Pet::make(["user_id" => $user->id, "name" => Random::name()]);
 
         $this->assertTrue($pet->save());
 

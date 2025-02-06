@@ -8,11 +8,13 @@ class HasOne
         private Model $model,
         private string $related,
         private string $foreignKey
-    ) {}
+    ) {
+        //
+    }
 
     public function get(): ?Model
     {
-        return $this->related::findBy([$this->foreignKey => $this->model->id]);
+        return $this->related::findBy([$this->foreignKey, $this->model->id]);
     }
 
     /**
@@ -22,6 +24,6 @@ class HasOne
     {
         $params[$this->foreignKey] = $this->model->id;
 
-        return new $this->related($params);
+        return $this->related::make($params);
     }
 }

@@ -39,13 +39,13 @@ class UserController extends Controller
 
     public function store(Request $request): Response
     {
-        $user = new User([
+        $user = User::create([
             "name" => $request->getParam("name"),
             "cpf" => $request->getParam("cpf"),
             "email" => $request->getParam("email")
         ]);
 
-        if (!$user->isValid()) {
+        if ($user->hasErrors()) {
             return Response::render(
                 "user/create",
                 ["errors" => $user->getAllErrors()]

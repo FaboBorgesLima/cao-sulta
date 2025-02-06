@@ -3,6 +3,7 @@
 namespace Core\Database\ActiveRecord;
 
 use Core\Database\Database;
+use Core\Database\QueryBuilder\ConditionFactory;
 use Lib\Paginator;
 use Lib\StringUtils;
 use Lib\Timestamp;
@@ -12,7 +13,7 @@ use ReflectionMethod;
 /**
  * Class Model
  * @package Core\Database\ActiveRecord
- * @property int $id
+ * @property ?int $id
  */
 abstract class Model
 {
@@ -38,9 +39,10 @@ abstract class Model
     /**
      * @param array<string, mixed> $params
      */
-    public function __construct($params = [])
+    private function __construct($params = [])
     {
         $this->hide = array_flip(static::$hidden);
+
 
         // Initialize attributes with null from database columns
         foreach (static::$columns as $column) {
@@ -174,7 +176,7 @@ abstract class Model
 
     public function hasErrors(): bool
     {
-        return empty($this->errors);
+        return !empty($this->errors);
     }
 
     public function errors(string $index = null): string | null
@@ -255,6 +257,32 @@ abstract class Model
         }
         return false;
     }
+
+
+    /**
+     * will only make the model, without saving
+     * @param array<string, mixed> $params
+     * @return static
+     */
+    public static function make($params): Model
+    {
+        return new static($params);
+    }
+
+    /**
+     * will create the model, saving it
+     * @param array<string, mixed> $params
+     * @return static
+     */
+    public static function create($params): Model
+    {
+        $model = new static($params);
+
+        $model->save();
+
+        return $model;
+    }
+
 
     /**
      * @param array<string, mixed> $data
@@ -369,10 +397,10 @@ abstract class Model
     }
 
     /**
-     * @param array<string, mixed> $conditions
+     * @param array<int, mixed> $queries
      * @return array<static>
      */
-    public static function where(array $conditions): array
+    public static function where(array $queries): array
     {
         $table = static::$table;
         $attributes = implode(', ', static::$columns);
@@ -381,17 +409,29 @@ abstract class Model
             SELECT id,created_at,updated_at, {$attributes} FROM {$table} WHERE 
         SQL;
 
-        $sqlConditions = array_map(function ($column) {
-            return "{$column} = :{$column}";
-        }, array_keys($conditions));
+        $conditionFactory = ConditionFactory::fromModelAttributes(static::$columns);
+
+        $conditions = [];
+
+        if (gettype($queries[0]) != 'array') {
+            $conditions[] = $conditionFactory->fromArray($queries);
+        } else {
+            foreach ($queries as $query) {
+                $conditions[] = $conditionFactory->fromArray($query);
+            }
+        }
+        $sqlConditions = array_map(function ($condition) {
+            return $condition->__toString();
+        }, $conditions);
+
 
         $sql .= implode(' AND ', $sqlConditions);
 
         $pdo = Database::getDatabaseConn();
         $stmt = $pdo->prepare($sql);
 
-        foreach ($conditions as $column => $value) {
-            $stmt->bindValue($column, $value);
+        foreach ($conditions as $condition) {
+            $stmt->bindValue($condition->column(), $condition->value());
         }
 
         $stmt->execute();
@@ -405,11 +445,11 @@ abstract class Model
     }
 
     /**
-     * @param array<string, mixed> $conditions
+     * @param array<mixed> $query
      */
-    public static function findBy($conditions): ?static
+    public static function findBy($query): ?static
     {
-        $resp = self::where($conditions);
+        $resp = self::where($query);
         if (isset($resp[0]))
             return $resp[0];
 
@@ -417,16 +457,22 @@ abstract class Model
     }
 
     /**
-     * @param array<string, mixed> $conditions
+     * @param array<string, mixed> $query
      */
-    public static function exists($conditions): bool
+    public static function exists($query): bool
     {
-        $resp = self::where($conditions);
+        $resp = self::where([$query]);
         return !empty($resp);
     }
 
     /* ------------------- RELATIONSHIPS METHODS ------------------- */
 
+    /**
+     * @template T of Model
+     * @param class-string<T> $related
+     * @param string $foreignKey
+     * @return BelongsTo<T>
+     */
     public function belongsTo(string $related, string $foreignKey): BelongsTo
     {
         return new BelongsTo($this, $related, $foreignKey);

@@ -18,20 +18,20 @@ class VetController extends Controller
 
     public function store(Request $request): Response
     {
-        $user_attributes = [
+        $userAttributes = [
             "cpf" => $request->getParam("cpf", ""),
             "name" => $request->getParam("name", ""),
             "email" => $request->getParam("email", "")
         ];
 
-        $crmv_attributes = [
+        $crmvAttributes = [
             "crmv" => $request->getParam("crmv", ""),
             "state" => $request->getParam("state", ""),
             "vet_id" => 0
         ];
 
-        $user = new User($user_attributes);
-        $crmv = new CRMVRegister($crmv_attributes);
+        $user = User::make($userAttributes);
+        $crmv = CRMVRegister::make($crmvAttributes);
 
         if (!$user->isValid() || !$crmv->isValid()) {
             return Response::render("vet/create", [
@@ -48,7 +48,7 @@ class VetController extends Controller
         /** @var \App\Models\Vet */
         $vet = $user->vet()->new([]);
 
-        $vet->attachCRMVRegister(new CRMVRegister($crmv_attributes));
+        $vet->attachCRMVRegister(CRMVRegister::make($crmvAttributes));
 
         $vet->save();
 

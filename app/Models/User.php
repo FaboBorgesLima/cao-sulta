@@ -5,12 +5,11 @@ namespace App\Models;
 use Core\Database\ActiveRecord\HasMany;
 use Core\Database\ActiveRecord\HasOne;
 use Core\Database\ActiveRecord\Model;
-use Core\Database\ActiveRecord\HasFactory;
 use Lib\CPF;
 use Lib\Random;
 use Lib\Validations;
 
-class User extends Model implements HasFactory
+class User extends Model
 {
     protected static string $table = "users";
     protected static array $columns = ["name", "email", "cpf"];
@@ -30,7 +29,7 @@ class User extends Model implements HasFactory
 
     public static function factory(): self
     {
-        return new User([
+        return User::make([
             "email" => Random::email(),
             "cpf" => CPF::getRandomCPF(),
             "name" => Random::name()

@@ -17,7 +17,7 @@ class VetTest extends TestCase
         /** @var \App\Models\Vet */
         $vet = $user->vet()->new([]);
 
-        $vet->attachCRMVRegister(new CRMVRegister(["crmv" => "2024001", "state" => "SP"]));
+        $vet->attachCRMVRegister(CRMVRegister::make(["crmv" => "2024001", "state" => "SP"]));
 
         $this->assertTrue($vet->save());
 
@@ -39,7 +39,7 @@ class VetTest extends TestCase
 
         $this->assertFalse($vet->save());
 
-        $vet->attachCRMVRegister(new CRMVRegister(["crmv" => "2024001", "state" => "SP"]));
+        $vet->attachCRMVRegister(CRMVRegister::make(["crmv" => "2024001", "state" => "SP"]));
 
         $this->assertTrue($vet->save());
     }

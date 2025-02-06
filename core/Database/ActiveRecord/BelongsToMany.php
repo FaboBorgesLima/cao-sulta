@@ -5,8 +5,17 @@ namespace Core\Database\ActiveRecord;
 use Core\Database\Database;
 use PDO;
 
+/**
+ * @template T of Model 
+ */
 class BelongsToMany
 {
+    /**
+     * 
+     * @param T $model
+     * @param string $related
+     * @param string $foreignKey
+     */
     public function __construct(
         private Model  $model,
         private string $related,
@@ -14,6 +23,7 @@ class BelongsToMany
         private string $from_foreign_key,
         private string $to_foreign_key,
     ) {
+        //
     }
 
     /**
@@ -50,7 +60,7 @@ class BelongsToMany
 
         $models = [];
         foreach ($rows as $row) {
-            $models[] = new $this->related($row);
+            $models[] = $this->related::make($row);
         }
 
         return $models;

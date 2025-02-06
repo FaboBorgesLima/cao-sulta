@@ -13,7 +13,7 @@ class UserTest extends TestCase
     public function test_can_crud(): void
     {
         // create
-        $user = new User([
+        $user = User::make([
             "name" => "fulano",
             "email" => "fake@fake.com",
             "cpf" => CPF::getRandomCPF()
@@ -58,9 +58,7 @@ class UserTest extends TestCase
         /** @var \App\Models\Vet */
         $vet = $user->vet()->new([]);
 
-        $crmvRegister = new CRMVRegister(["crmv" => "2024001", "state" => "SP"]);
-
-        $vet->attachCRMVRegister($crmvRegister);
+        $vet->attachCRMVRegister(CRMVRegister::make(["crmv" => "2024001", "state" => "SP"]));
 
         $vet->save();
 

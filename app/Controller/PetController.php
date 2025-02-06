@@ -10,7 +10,7 @@ use Core\Http\Response;
 
 class PetController extends Controller
 {
-    public function all(Request $request): Response
+    public function index(Request $request): Response
     {
         $view_data = [
             "pets" => [],
@@ -23,7 +23,7 @@ class PetController extends Controller
         $profile = User::findById($request->getParam("id"));
 
         if (!$profile) {
-            return Response::render("pet/all", $view_data)->withUser();
+            return Response::render("pet/index", $view_data)->withUser();
         }
 
         $view_data["profile"] = $profile->toArray();
@@ -34,7 +34,7 @@ class PetController extends Controller
             return $pet->toArray();
         }, $view_data["pets"]);
 
-        return Response::render("pet/all", $view_data)->withUser();
+        return Response::render("pet/index", $view_data)->withUser();
     }
 
     public function create(): Response
@@ -51,10 +51,10 @@ class PetController extends Controller
             "user_id" => $user->id
         ];
 
-        $pet =  new Pet($attributes);
+        $pet = Pet::create($attributes);
 
-        if ($pet->save()) {
-            return Response::redirectTo(route("user.pets", ["id" => $user->id]));
+        if (!$pet->hasErrors()) {
+            return Response::redirectTo(route("pet.index", ["id" => $user->id]));
         }
 
         return Response::render("pet/create", ["errors" => $pet->getAllErrors()]);
@@ -102,7 +102,7 @@ class PetController extends Controller
 
         $pet->save();
 
-        return Response::redirectTo(route("user.pets", ["id" => $request->user()->id]));
+        return Response::redirectTo(route("pet.index", ["id" => $request->user()->id]));
     }
 
     public function delete(Request $request): Response
@@ -123,6 +123,6 @@ class PetController extends Controller
 
         $pet->destroy();
 
-        return Response::redirectTo(route("user.pets", ["id" => $request->user()->id]));
+        return Response::redirectTo(route("pet.index", ["id" => $request->user()->id]));
     }
 }

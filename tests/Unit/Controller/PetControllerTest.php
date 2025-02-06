@@ -22,7 +22,7 @@ class PetControllerTest extends ControllerTestCase
 
         $this->render = true;
 
-        $view = $this->get(PetController::class, "all", ["id" => $user->id]);
+        $view = $this->get(PetController::class, "index", ["id" => $user->id]);
 
         $this->assertIsString($view);
 
@@ -46,9 +46,9 @@ class PetControllerTest extends ControllerTestCase
 
         $res = $this->post(PetController::class, "store", ["name" => $name]);
 
-        $this->assertNotNull(Pet::findBy(["name" => $name]));
+        $this->assertNotNull(Pet::findBy([["name", $name]]));
 
-        $this->assertEquals($user->id, Pet::findBy(["name" => $name])->user_id);
+        $this->assertEquals($user->id, Pet::findBy([["name", $name]])->user_id);
 
         $this->assertEquals(302, $res->code);
     }

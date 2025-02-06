@@ -11,7 +11,7 @@ class HasMany
         private string $related,
         private string $foreignKey
     ) {
-        /** */
+        //
     }
 
     /**
@@ -19,7 +19,9 @@ class HasMany
      */
     public function get(): array
     {
-        return $this->related::where([$this->foreignKey => $this->model->id]);
+        return $this->related::where([
+            [$this->foreignKey, $this->model->id]
+        ]);
     }
 
     /**
@@ -29,7 +31,7 @@ class HasMany
     {
         $params[$this->foreignKey] = $this->model->id;
 
-        return new $this->related($params);
+        return $this->related::make($params);
     }
 
     public function findById(int $id): ?Model

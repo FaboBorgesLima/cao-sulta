@@ -48,7 +48,7 @@ class UserControllerTest extends ControllerTestCase
         /** @var \App\Models\Vet */
         $vet = $user->vet()->new([]);
 
-        $vet->attachCRMVRegister(new CRMVRegister(["state" => "SP", "crmv" => "2024123"]));
+        $vet->attachCRMVRegister(CRMVRegister::make(["state" => "SP", "crmv" => "2024123"]));
 
         $this->assertTrue($vet->save());
 
@@ -101,7 +101,7 @@ class UserControllerTest extends ControllerTestCase
 
         $user->save();
 
-        $token = UserToken::make($user->id);
+        $token = UserToken::withRandomToken($user->id);
 
         $token->save();
 

@@ -36,7 +36,7 @@ abstract class ControllerTestCase extends TestCase
 
         $user->save();
 
-        $token = UserToken::make($user->id);
+        $token = UserToken::withRandomToken($user->id);
 
         $token->save();
 
