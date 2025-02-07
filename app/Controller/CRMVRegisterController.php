@@ -18,7 +18,7 @@ class CRMVRegisterController extends Controller
             return Response::redirectTo(route("dashboard"));
         }
 
-        /** @var \App\Models\Vet|null */
+
         $vet = Vet::findById((int) $vet_id);
 
         if (!$vet) {

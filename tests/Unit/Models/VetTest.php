@@ -10,9 +10,7 @@ class VetTest extends TestCase
 {
     public function test_can_create_with_cmrv(): void
     {
-        $user = User::factory();
-
-        $user->save();
+        $user = User::factory()->create();
 
         /** @var \App\Models\Vet */
         $vet = $user->vet()->new([]);
@@ -30,7 +28,7 @@ class VetTest extends TestCase
 
     public function test_cannot_create_without_cmrv(): void
     {
-        $user = User::factory();
+        $user = User::factory()->create();
 
         $user->save();
 

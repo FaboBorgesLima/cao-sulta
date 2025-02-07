@@ -12,7 +12,7 @@ class PetControllerTest extends ControllerTestCase
 {
     public function test_all(): void
     {
-        $user = User::factory();
+        $user = User::factory()->make();
 
         $user->save();
 

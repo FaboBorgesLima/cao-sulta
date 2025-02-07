@@ -32,9 +32,7 @@ abstract class ControllerTestCase extends TestCase
 
     public function login(): User
     {
-        $user = User::factory();
-
-        $user->save();
+        $user = User::factory()->create();
 
         $token = UserToken::withRandomToken($user->id);
 

@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Core\Database\ActiveRecord\Factory;
 use Core\Database\ActiveRecord\HasMany;
 use Core\Database\ActiveRecord\HasOne;
 use Core\Database\ActiveRecord\Model;
+use Database\Factory\UserFactory;
 use Lib\CPF;
 use Lib\Random;
 use Lib\Validations;
@@ -27,13 +29,12 @@ class User extends Model
         Validations::name("name", $this);
     }
 
-    public static function factory(): self
+    /**
+     * @return Factory<self>
+     */
+    public static function factory(): Factory
     {
-        return User::make([
-            "email" => Random::email(),
-            "cpf" => CPF::getRandomCPF(),
-            "name" => Random::name()
-        ]);
+        return new UserFactory();
     }
 
     /**

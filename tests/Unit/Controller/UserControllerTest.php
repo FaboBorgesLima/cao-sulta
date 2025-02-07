@@ -16,7 +16,7 @@ class UserControllerTest extends ControllerTestCase
     public function test_show(): void
     {
         // can show without being logged
-        $user = User::factory();
+        $user = User::factory()->make();
 
         $user->save();
 
@@ -97,7 +97,7 @@ class UserControllerTest extends ControllerTestCase
     public function test_dashboard(): void
     {
 
-        $user = User::factory();
+        $user = User::factory()->make();
 
         $user->save();
 
