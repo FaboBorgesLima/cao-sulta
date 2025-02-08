@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <?php require __DIR__ . "/../Components/head.phtml"; ?>
+    <title><?= $vet["profile"]["name"] ?></title>
+</head>
+
+<body class="bg-html">
+    <?php require __DIR__ . "/../Components/nav.phtml" ?>
+    <main class="container mx-auto grow my-8 px-4">
+
+        <!-- Link para o perfil do veterinário -->
+        <a href="<?= route('user.show', ['id' => $vet['profile']['id']]) ?>" class="card p-6 flex flex-col gap-4 text-2xl font-bold text-gray-800 dark:text-gray-200 hover:bg-blue-600/10 transition-all duration-300">
+            <span class="text-blue-600">Veterinary:</span> <?= $vet['profile']['name'] ?>
+        </a>
+
+        <!-- Lista de CRMV -->
+        <div class="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <?php foreach ($vet["crmv_registers"] as $crmv_register): ?>
+                <!-- Link para a rota de atualização do CRMV -->
+                <a href="<?= route('crmv-register.update', ['crmv_register' => $crmv_register['id']]) ?>" class="card p-6 flex flex-col gap-4 fancy-hover-color-transition transition-all duration-300">
+                    <p class="text-lg font-semibold text-gray-700 dark:text-gray-300">CRMV Number: <span class="text-blue-600"><?= $crmv_register["crmv"] ?></span></p>
+                    <p class="text-gray-600 dark:text-gray-400">State: <?= $crmv_register["state"] ?></p>
+                </a>
+            <?php endforeach; ?>
+
+            <!-- Botão para adicionar novo CRMV -->
+            <?php if (isset($user)): ?>
+                <a href="<?= route('crmv-register.create') ?>" class="card p-6 flex flex-col gap-4 items-center justify-center fancy-hover-color-transition transition-all duration-300">
+                    <p class="text-lg font-semibold text-gray-700 dark:text-gray-300">Add New CRMV</p>
+                    <button class="button text-xl aspect-square w-10 flex items-center justify-center">+</button>
+                </a>
+            <?php endif; ?>
+        </div>
+    </main>
+</body>
+
+</html>

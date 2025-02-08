@@ -29,7 +29,7 @@ Route::post("/vet/store", [VetController::class, "store"])->name("vet.store");
 
 // ---------- CRMV Register
 
-Route::get("/vet/{id}/crmv-register", [CRMVRegisterController::class, "show"])->name("crmv-registers.show");
+Route::get("/user/{profile}/crmv-register", [CRMVRegisterController::class, "index"])->name("crmv-register.index");
 
 // ---------- Pet
 Route::get("/user/{id}/pets", [PetController::class, "index"])->name("pet.index");
@@ -47,4 +47,14 @@ Route::middleware("auth")->group(function () {
 
     // ---------- Auth
     Route::get("/logout", [AuthenticationController::class, "logout"])->name("auth.logout");
+});
+
+Route::middleware("vet")->group(function () {
+
+    // ---------- CRMV Register
+    Route::delete("/crmv-register/{crmv_register}", [CRMVRegisterController::class, "destroy"])->name("crmv-register.destroy");
+    Route::get("/crmv-register/{crmv_register}/update", [CRMVRegisterController::class, "update"])->name("crmv-register.update");
+    Route::post("/crmv-register/{crmv_register}/update", [CRMVRegisterController::class, "save"])->name("crmv-register.save");
+    Route::get("/crmv-register/create", [CRMVRegisterController::class, "create"])->name("crmv-register.create");
+    Route::post("/crmv-register/create", [CRMVRegisterController::class, "store"])->name("crmv-register.store");
 });

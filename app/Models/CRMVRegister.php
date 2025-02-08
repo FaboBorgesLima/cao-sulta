@@ -48,6 +48,7 @@ class CRMVRegister extends Model
         if (count($crmvs) < 2) {
             return false;
         }
+
         return parent::destroy();
     }
 }

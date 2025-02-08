@@ -1,4 +1,5 @@
 @tailwind base;
+
 @layer components {
   .bg-html {
     @apply bg-gray-50 dark:bg-gray-950;
@@ -9,19 +10,29 @@
   .card {
     @apply rounded-2xl card-shadow bg-html;
   }
+  .fancy-hover-color-transition {
+    @apply hover:bg-blue-600/10 transition-all duration-300;
+  }
   .button {
-    @apply rounded-full bg-blue-600/90 text-gray-50 card-shadow font-bold transition-all duration-300 hover:bg-blue-600;
+    @apply rounded-full bg-blue-600/90 text-gray-50 card-shadow font-bold transition-all duration-300 hover:bg-blue-600 focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 px-6 py-2;
   }
   .form-label {
-    @apply flex flex-col gap-4 text-center w-full font-bold;
+    @apply flex flex-col gap-2 text-center w-full font-bold;
   }
   .form-input {
-    @apply text-center rounded-2xl font-normal bg-gray-900/5 dark:bg-gray-50/10;
+    @apply text-center rounded-2xl font-normal bg-gray-900/5 dark:bg-gray-50/10 focus:ring-2 focus:ring-blue-600 focus:border-transparent;
   }
   .form-card {
-    @apply w-1/2 mx-auto p-4 flex flex-col items-center gap-4 card;
+    @apply w-full md:w-3/4 lg:w-1/2 mx-auto p-4 flex flex-col items-center gap-4 card;
+  }
+  .error-message {
+    @apply text-red-500 text-center font-semibold;
+  }
+  select.form-input {
+    @apply appearance-none bg-white dark:bg-gray-50/10;
   }
 }
+
 @layer base {
   html * {
     @apply dark:text-gray-50;
@@ -33,5 +44,6 @@
     @apply flex flex-col min-h-screen;
   }
 }
+
 @tailwind components;
 @tailwind utilities;

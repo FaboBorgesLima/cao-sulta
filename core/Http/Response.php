@@ -62,11 +62,28 @@ class Response
         return $res;
     }
 
-    public static function notFound(string $msg = ""): Response
+    public static function error(int $code, string $msg = "", bool $json = false): Response
     {
-        $res = static::render("not-found", ["msg" => $msg]);
-        $res->code = 404;
+        $data = [
+            "msg" => $msg,
+            "code" => $code
+        ];
+
+        $res = $json ? static::json($data) : static::render("error", $data);
+
+        $res->code = $code;
+
         return $res;
+    }
+
+    public static function notFound(string $msg = "", bool $json = false): Response
+    {
+        return static::error(404, $msg, $json);
+    }
+
+    public static function forbidden(string $msg = "", bool $json = false): Response
+    {
+        return static::error(403, $msg, $json);
     }
 
     public function withUser(): self

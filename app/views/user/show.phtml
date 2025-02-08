@@ -11,17 +11,25 @@
 
 <body>
     <?php require __DIR__ . "/../Components/nav.phtml" ?>
-    <main class="grow my-4 flex justify-center items-center">
-        <div class="card p-4 flex flex-col gap-4">
-            <h1 class="text-2xl bold "><?= isset($profile) ? $profile["name"] : 'not found' ?></h1>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="flex flex-col gap-4">
-                    <span class="text-center"><?= $is_vet ? "veterinary" : "tutor" ?></span>
-                </div>
-            </div>
+    <main class="grow my-4 mx-auto container flex flex-col gap-4">
+        <header class="card p-4 flex flex-col gap-4">
+            <h1 class="text-2xl bold "><?= $is_vet ? "veterinary" : "tutor" ?> <?= isset($profile) ? $profile["name"] : 'not found' ?></h1>
             <?php if (isset($user) && isset($profile) && $user["id"] == $profile["id"]): ?>
                 <a href="<?= route("auth.logout") ?>" class="button text-center py-2 px-4 ">Logout</a>
             <?php endif; ?>
+        </header>
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <?php if ($is_vet): ?>
+                <a class="card p-4 fancy-hover-color-transition" href="<?= route("crmv-register.index", ['profile' => $profile['id']]) ?>">
+                    <h2 class="font-bold">CRMVs</h2>
+                    <p>Vet CRMV's</p>
+                </a>
+            <?php endif; ?>
+
+            <a href="<?= route("pet.index", ["id" => $profile["id"]]) ?>" class="flex flex-col gap-4 card p-4 fancy-hover-color-transition">
+                <h2 class="font-bold">Pets</h2>
+                <p>User pets.</p>
+            </a>
         </div>
     </main>
 
