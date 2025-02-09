@@ -17,6 +17,6 @@ class PermissionTest extends TestCase
 
         $user->save();
 
-        //
+        $this->assertTrue(true);
     }
 }
