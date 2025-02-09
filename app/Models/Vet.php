@@ -3,11 +3,8 @@
 namespace App\Models;
 
 use Core\Database\ActiveRecord\BelongsTo;
-use Core\Database\ActiveRecord\HasFactory;
 use Core\Database\ActiveRecord\HasMany;
-use Core\Database\ActiveRecord\HasOne;
 use Core\Database\ActiveRecord\Model;
-use Lib\Random;
 use Lib\Validations;
 
 class Vet extends Model
@@ -76,5 +73,13 @@ class Vet extends Model
     public function CRMVRegisters(): HasMany
     {
         return $this->hasMany(CRMVRegister::class, "vet_id");
+    }
+
+    /**
+     * @return HasMany<Permission>
+     */
+    public function permissions(): HasMany
+    {
+        return $this->hasMany(Permission::class, "vet_id");
     }
 }

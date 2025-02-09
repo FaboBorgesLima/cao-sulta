@@ -27,10 +27,13 @@ abstract class Model
     private array $attributes = [];
 
     protected static string $table = '';
-    /** @var array<int, string> */
+    /** @var array<int,string> */
     protected static array $columns = [];
 
-    /** @var array<int, string> */
+    /** @var array<string,string|int|float|bool> */
+    protected static array $default = [];
+
+    /** @var array<int,string> */
     protected static array $hidden = [];
 
     /** @var array<string,mixed> */
@@ -44,9 +47,13 @@ abstract class Model
         $this->hide = array_flip(static::$hidden);
 
 
-        // Initialize attributes with null from database columns
+        // Initialize attributes with null or default from database columns
         foreach (static::$columns as $column) {
             $this->attributes[$column] = null;
+        }
+
+        foreach (static::$default as $column => $value) {
+            $this->__set($column, $value);
         }
 
         foreach ($params as $property => $value) {
@@ -111,7 +118,8 @@ abstract class Model
             $allowedTypes = [
                 'Core\Database\ActiveRecord\BelongsTo',
                 'Core\Database\ActiveRecord\HasMany',
-                'Core\Database\ActiveRecord\BelongsToMany'
+                'Core\Database\ActiveRecord\BelongsToMany',
+                'Core\Database\ActiveRecord\HasOne'
             ];
 
             if ($returnType !== null && in_array($returnType->getName(), $allowedTypes)) {

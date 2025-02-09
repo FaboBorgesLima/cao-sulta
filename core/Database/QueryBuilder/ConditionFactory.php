@@ -21,7 +21,7 @@ class ConditionFactory
         return new ConditionFactory($attributesHashMap);
     }
     /**
-     * @param array<string>|array<array<string>> $columnConditionValue
+     * @param array<int,string|int>|array<int,array<int|string>> $columnConditionValue
      */
     public function fromArray(array $columnConditionValue): Condition
     {

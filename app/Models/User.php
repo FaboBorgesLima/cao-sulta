@@ -65,4 +65,12 @@ class User extends Model
     {
         return $this->hasMany(Pet::class, "user_id");
     }
+
+    /**
+     * @return HasMany<Permission>
+     */
+    public function permissions(): HasMany
+    {
+        return $this->hasMany(Permission::class, "user_id");
+    }
 }

@@ -15,6 +15,10 @@ class Permission extends Model
         "accepted"
     ];
 
+    protected static array $default = [
+        "accepted" => 0
+    ];
+
     public function validates(): void
     {
         Validations::notEmpty("user_id", $this);
