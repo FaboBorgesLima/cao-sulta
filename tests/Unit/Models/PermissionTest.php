@@ -28,7 +28,7 @@ class PermissionTest extends TestCase
 
         $this->assertTrue($permission->save());
 
-        // Read 
+        // Read
 
         $this->assertInstanceOf(Permission::class, Permission::findById($permission->id));
 
