@@ -52,9 +52,12 @@ Route::middleware("auth")->group(function () {
 Route::middleware("vet")->group(function () {
 
     // ---------- CRMV Register
-    Route::delete("/crmv-register/{crmv_register}", [CRMVRegisterController::class, "destroy"])->name("crmv-register.destroy");
-    Route::get("/crmv-register/{crmv_register}/update", [CRMVRegisterController::class, "update"])->name("crmv-register.update");
-    Route::post("/crmv-register/{crmv_register}/update", [CRMVRegisterController::class, "save"])->name("crmv-register.save");
+    Route::delete("/crmv-register/{crmv_register}", [CRMVRegisterController::class, "destroy"])
+        ->name("crmv-register.destroy");
+    Route::get("/crmv-register/{crmv_register}/update", [CRMVRegisterController::class, "update"])
+        ->name("crmv-register.update");
+    Route::post("/crmv-register/{crmv_register}/update", [CRMVRegisterController::class, "save"])
+        ->name("crmv-register.save");
     Route::get("/crmv-register/create", [CRMVRegisterController::class, "create"])->name("crmv-register.create");
     Route::post("/crmv-register/create", [CRMVRegisterController::class, "store"])->name("crmv-register.store");
 });
