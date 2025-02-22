@@ -8,11 +8,7 @@ class UserPopulate
 {
     public static function populate(): void
     {
-        for ($i = 0; $i < 10; $i++) {
-            $user = User::factory();
-
-            $user->save();
-        }
+        User::factory()->createMany(10);
 
         echo User::class . " populated\n";
     }

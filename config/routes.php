@@ -1,6 +1,7 @@
 <?php
 
 use App\Controller\AuthenticationController;
+use App\Controller\CRMVRegisterController;
 use App\Controller\PetController;
 use App\Controller\StaticPagesController;
 use App\Controller\UserController;
@@ -16,7 +17,7 @@ Route::get("/user/{id}", [UserController::class, "show"])->name("user.show");
 Route::post("/user/store", [UserController::class, "store"])->name("user.store");
 
 // ---------- Auth
-Route::get("/auth", [AuthenticationController::class, "new"])->name("auth.new");
+Route::get("/auth", [AuthenticationController::class, "login"])->name("auth.login");
 Route::get("/auth/user/{id}/{cpf}", [AuthenticationController::class, "send"])->name("auth.send");
 Route::get("/auth/{token}", [AuthenticationController::class, "authenticate"])->name("auth.auth");
 Route::post("/auth/user", [AuthenticationController::class, "find"])->name("auth.find");
@@ -26,8 +27,12 @@ Route::post("/auth/user", [AuthenticationController::class, "find"])->name("auth
 Route::get("/vet/create", [VetController::class, "create"])->name("vet.create");
 Route::post("/vet/store", [VetController::class, "store"])->name("vet.store");
 
+// ---------- CRMV Register
+
+Route::get("/user/{profile}/crmv-register", [CRMVRegisterController::class, "index"])->name("crmv-register.index");
+
 // ---------- Pet
-Route::get("/user/{id}/pets", [PetController::class, "all"])->name("user.pets");
+Route::get("/user/{id}/pets", [PetController::class, "index"])->name("pet.index");
 
 Route::middleware("auth")->group(function () {
     Route::get("/dashboard", [UserController::class, "dashboard"])->name("dashboard");
@@ -42,4 +47,17 @@ Route::middleware("auth")->group(function () {
 
     // ---------- Auth
     Route::get("/logout", [AuthenticationController::class, "logout"])->name("auth.logout");
+});
+
+Route::middleware("vet")->group(function () {
+
+    // ---------- CRMV Register
+    Route::delete("/crmv-register/{crmv_register}", [CRMVRegisterController::class, "destroy"])
+        ->name("crmv-register.destroy");
+    Route::get("/crmv-register/{crmv_register}/update", [CRMVRegisterController::class, "update"])
+        ->name("crmv-register.update");
+    Route::post("/crmv-register/{crmv_register}/update", [CRMVRegisterController::class, "save"])
+        ->name("crmv-register.save");
+    Route::get("/crmv-register/create", [CRMVRegisterController::class, "create"])->name("crmv-register.create");
+    Route::post("/crmv-register/create", [CRMVRegisterController::class, "store"])->name("crmv-register.store");
 });

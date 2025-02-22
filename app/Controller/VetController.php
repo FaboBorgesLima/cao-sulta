@@ -30,8 +30,8 @@ class VetController extends Controller
             "vet_id" => 0
         ];
 
-        $user = new User($userAttributes);
-        $crmv = new CRMVRegister($crmvAttributes);
+        $user = User::make($userAttributes);
+        $crmv = CRMVRegister::make($crmvAttributes);
 
         if (!$user->isValid() || !$crmv->isValid()) {
             return Response::render("vet/create", [
@@ -48,7 +48,7 @@ class VetController extends Controller
         /** @var \App\Models\Vet */
         $vet = $user->vet()->new([]);
 
-        $vet->attachCRMVRegister(new CRMVRegister($crmvAttributes));
+        $vet->attachCRMVRegister(CRMVRegister::make($crmvAttributes));
 
         $vet->save();
 

@@ -19,24 +19,24 @@ class AuthenticationController extends Controller
             return Response::redirectTo(route("dashboard"));
         }
 
-        return Response::redirectTo(route("user.login"));
+        return Response::redirectTo(route("auth.login"));
     }
 
-    public function new(): Response
+    public function login(): Response
     {
-        return Response::render("auth/new");
+        return Response::render("auth/login");
     }
 
 
-    public function login(Request $request): Response
+    public function store(Request $request): Response
     {
         $user = User::findBy([
-            "email" => $request->getParam("email", ""),
-            "cpf" => $request->getParam("cpf", "")
+            ["email", $request->getParam("email", "")],
+            ["cpf", $request->getParam("cpf", "")]
         ]);
 
         if (!$user) {
-            return Response::redirectTo(route("auth.new"));
+            return Response::redirectTo(route("auth.login"));
         }
 
         return Response::redirectTo(route("auth.send", ["id" => $user->id]));
@@ -46,27 +46,26 @@ class AuthenticationController extends Controller
     {
 
         $user = User::findBy([
-            "id" => $request->getParam("id", ""),
-            "cpf" => $request->getParam("cpf", "")
+            ["id", $request->getParam("id", "")],
+            ["cpf", $request->getParam("cpf", "")]
         ]);
 
         if (!$user) {
-            return Response::redirectTo(route("auth.new"));
+            return Response::redirectTo(route("auth.login"));
         }
 
-        $userToken = UserToken::make($user->id);
-        $userToken->save();
+        $user_token = UserToken::withRandomToken($user->id);
+        $user_token->save();
 
-        return Response::render("auth/send", ["token" => $userToken->token]);
+        return Response::render("auth/send", ["token" => $user_token->token]);
     }
 
     public function find(Request $request): Response
     {
         $user = User::findBy([
-            "cpf" => $request->getParam("cpf", ""),
-            "email" => $request->getParam("email", "")
+            ["cpf", $request->getParam("cpf", "")],
+            ["email", $request->getParam("email", "")]
         ]);
-        ;
 
         if (!$user) {
             return Response::goBack();

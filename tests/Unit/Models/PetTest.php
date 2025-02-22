@@ -11,11 +11,11 @@ class PetTest extends TestCase
 {
     public function test_can_crud(): void
     {
-        $pet = User::factory();
+        $user = User::factory()->make();
 
-        $pet->save();
+        $user->save();
 
-        $pet = $pet->pets()->new(["name" => Random::name()]);
+        $pet = $user->pets()->new(["name" => Random::name()]);
 
         // create
         $this->assertTrue($pet->save());
@@ -46,11 +46,11 @@ class PetTest extends TestCase
 
     public function test_cannot_put_wrong_name(): void
     {
-        $user = User::factory();
+        $user = User::factory()->make();
 
         $user->save();
 
-        $pet = new Pet(["user_id" => $user->id, "name" => Random::name()]);
+        $pet = Pet::make(["user_id" => $user->id, "name" => Random::name()]);
 
         $this->assertTrue($pet->save());
 

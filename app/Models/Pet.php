@@ -18,6 +18,9 @@ class Pet extends Model
         Validations::name("name", $this);
     }
 
+    /**
+     * @return BelongsTo<User>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, "user_id");

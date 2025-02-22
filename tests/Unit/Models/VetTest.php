@@ -10,14 +10,12 @@ class VetTest extends TestCase
 {
     public function test_can_create_with_cmrv(): void
     {
-        $user = User::factory();
-
-        $user->save();
+        $user = User::factory()->create();
 
         /** @var \App\Models\Vet */
         $vet = $user->vet()->new([]);
 
-        $vet->attachCRMVRegister(new CRMVRegister(["crmv" => "2024001", "state" => "SP"]));
+        $vet->attachCRMVRegister(CRMVRegister::make(["crmv" => "2024001", "state" => "SP"]));
 
         $this->assertTrue($vet->save());
 
@@ -30,7 +28,7 @@ class VetTest extends TestCase
 
     public function test_cannot_create_without_cmrv(): void
     {
-        $user = User::factory();
+        $user = User::factory()->create();
 
         $user->save();
 
@@ -39,7 +37,7 @@ class VetTest extends TestCase
 
         $this->assertFalse($vet->save());
 
-        $vet->attachCRMVRegister(new CRMVRegister(["crmv" => "2024001", "state" => "SP"]));
+        $vet->attachCRMVRegister(CRMVRegister::make(["crmv" => "2024001", "state" => "SP"]));
 
         $this->assertTrue($vet->save());
     }

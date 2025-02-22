@@ -28,15 +28,23 @@ class Random
     public static function alfabeticString(int $length): string
     {
         $out = "";
+
         for ($i = 0; $i < $length; $i++) {
             $out .= static::char("a", "z");
         }
+
         return $out;
     }
 
     public static function char(string $start, string $end): string
     {
         return chr(random_int(ord($start), ord($end)));
+    }
+
+    public static function CRMV(): string
+    {
+        return (string) random_int(CRMV::MIN_YEAR, Timestamp::now()->getYear())
+            . StringUtils::intToStringPaddingLeft(random_int(0, 999), 3);
     }
 
     public static function CPF(): string

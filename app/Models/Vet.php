@@ -12,7 +12,7 @@ class Vet extends Model
     protected static string $table = "vets";
     protected static array $columns = ["user_id"];
     /** @var array<int,Model> */
-    private array $attachedCRMVRegisters = [];
+    private array $attached_CRMV_registers = [];
 
     public function validates(): void
     {
@@ -25,18 +25,18 @@ class Vet extends Model
 
     public function attachCRMVRegister(CRMVRegister $crmv): void
     {
-        $this->attachedCRMVRegisters[] = $crmv;
+        $this->attached_CRMV_registers[] = $crmv;
     }
 
-    public function willCreateWithCRMVRegisters(): bool
+    private function willCreateWithCRMVRegisters(): bool
     {
-        if ($this->newRecord() && $this->attachedCRMVRegisters) {
-            foreach ($this->attachedCRMVRegisters as $CRMVRegister) {
-                $CRMVRegister->vet_id = 0;
-                if (!$CRMVRegister->isValid()) {
+        if ($this->newRecord() && $this->attached_CRMV_registers) {
+            foreach ($this->attached_CRMV_registers as $CRMV_register) {
+                $CRMV_register->vet_id = 0;
+                if (!$CRMV_register->isValid()) {
                     return false;
                 }
-                $CRMVRegister->vet_id = null;
+                $CRMV_register->vet_id = null;
             }
             return true;
         }
@@ -51,21 +51,35 @@ class Vet extends Model
             return false;
         }
 
-        foreach ($this->attachedCRMVRegisters as $CRMVRegister) {
-            $CRMVRegister->vet_id = $this->id;
-            $CRMVRegister->save();
+        foreach ($this->attached_CRMV_registers as $CRMV_register) {
+            $CRMV_register->vet_id = $this->id;
+            $CRMV_register->save();
         }
 
         return true;
     }
 
+    /**
+     * @return BelongsTo<User>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, "user_id");
     }
 
+    /**
+     * @return HasMany<CRMVRegister>
+     */
     public function CRMVRegisters(): HasMany
     {
         return $this->hasMany(CRMVRegister::class, "vet_id");
+    }
+
+    /**
+     * @return HasMany<Permission>
+     */
+    public function permissions(): HasMany
+    {
+        return $this->hasMany(Permission::class, "vet_id");
     }
 }

@@ -55,6 +55,23 @@ class Request
         $this->params = array_merge($this->params, $params);
     }
 
+    /**
+     * @param string[] $params
+     * @return array<string,mixed>
+     * */
+    public function only(array $params): array
+    {
+        $out = [];
+
+        foreach ($params as $key) {
+            if (isset($this->params[$key])) {
+                $out[$key] = $this->params[$key];
+            }
+        }
+
+        return $out;
+    }
+
     public function acceptJson(): bool
     {
         return (isset($_SERVER['HTTP_ACCEPT']) && $_SERVER['HTTP_ACCEPT'] === 'application/json');

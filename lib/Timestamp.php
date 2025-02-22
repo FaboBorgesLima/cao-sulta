@@ -2,7 +2,9 @@
 
 namespace Lib;
 
-class Timestamp
+use Stringable;
+
+class Timestamp implements Stringable
 {
     private function __construct(public int $time)
     {
@@ -32,5 +34,10 @@ class Timestamp
     public function getYear(): int
     {
         return (int) date('Y', $this->time);
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->time;
     }
 }

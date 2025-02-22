@@ -12,33 +12,24 @@ class UserController extends Controller
 {
     public function show(Request $request): Response
     {
-        $user = User::findById((int) $request->getParam("id"));
-
-        $loggedUser = Auth::user();
+        $profile = User::findById((int) $request->getParam("id"));
 
         $data = [
-            "name" => "not found",
-            "isVet" => false,
-            "userId" => $request->getParam("id"),
-            "loggedUserId" => null
+            "profile" => [
+                "name" => "not found",
+                "id" => $request->getParam("id"),
+            ],
+            "is_vet" => false,
         ];
 
-        if (!$user) {
-            return Response::render("user/show", $data);
+        if (!$profile) {
+            return Response::render("user/show", $data)->withUser();
         }
 
-        $data["name"] = $user->name;
-        $data["isVet"] = $user->isVet();
+        $data["is_vet"] = $profile->isVet();
+        $data["profile"] = $profile->toArray();
 
-        if ($loggedUser) {
-            $data["loggedUserId"] = $loggedUser->id;
-        }
-
-        if (!$loggedUser) {
-            return Response::render("user/show", $data);
-        }
-
-        return Response::render("user/show", $data);
+        return Response::render("user/show", $data)->withUser();
     }
 
     public function create(): Response
@@ -48,13 +39,13 @@ class UserController extends Controller
 
     public function store(Request $request): Response
     {
-        $user = new User([
+        $user = User::create([
             "name" => $request->getParam("name"),
             "cpf" => $request->getParam("cpf"),
             "email" => $request->getParam("email")
         ]);
 
-        if (!$user->isValid()) {
+        if ($user->hasErrors()) {
             return Response::render(
                 "user/create",
                 ["errors" => $user->getAllErrors()]
@@ -68,14 +59,10 @@ class UserController extends Controller
 
     public function dashboard(): Response
     {
-        $user = Auth::user();
         $vet = Auth::isVet();
-        $loggedUserId = $user->id;
 
         return Response::render("user/dashboard", [
-            "name" => $user->name,
-            "loggedUserId" => $loggedUserId,
-            "isVet" => (bool) $vet,
-        ]);
+            "is_vet" => (bool) $vet,
+        ])->withUser();
     }
 }

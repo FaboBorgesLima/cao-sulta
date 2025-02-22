@@ -21,7 +21,7 @@ class CRMV
         return ($year >= static::MIN_YEAR && Timestamp::now()->getYear() >= $year);
     }
 
-    private static function getYear(string $crmv): int
+    public static function getYear(string $crmv): int
     {
         return (int) substr($crmv, 0, 4);
     }

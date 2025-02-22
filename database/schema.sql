@@ -52,6 +52,7 @@ CREATE TABLE permissions (
     updated_at TIMESTAMP,
     user_id INT NOT NULL,
     vet_id INT NOT NULL,
+    accepted BOOLEAN DEFAULT 0,
     FOREIGN KEY (vet_id) REFERENCES vets(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

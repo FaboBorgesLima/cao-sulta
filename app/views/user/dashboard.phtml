@@ -2,14 +2,12 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php
+    require(__DIR__ . "/../Components/head.phtml");
+    ?>
 
-    <head>
-        <link rel="stylesheet" href="/assets/build/style.css">
-
-        <title>Register</title>
-    </head>
+    <title>Register</title>
+</head>
 
 <body>
     <main class="grow flex flex-col gap-4">
@@ -17,9 +15,9 @@
         require(__DIR__ . "/../Components/nav.phtml");
         ?>
         <div class="container mx-auto grow flex flex-col gap-4">
-            <h1 class="font-bold text-2xl">Welcome <?= $name ?></h1>
+            <h1 class="font-bold text-2xl">Welcome <?= $user["name"] ?></h1>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <a href="<?= route("user.pets", ["id" => $loggedUserId]) ?>" class="flex flex-col gap-4 hover:bg-blue-600/10 transition-all duration-300 card p-4">
+                <a href="<?= route("pet.index", ["id" => $user["id"]]) ?>" class="flex flex-col gap-4 card p-4">
                     <h2 class="font-bold">My Pets</h2>
                     <p>View your registred pets.</p>
                 </a>

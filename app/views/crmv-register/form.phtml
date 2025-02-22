@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <?php require(__DIR__ . "/../Components/head.phtml"); ?>
+    <title><?= isset($update) && $update ? $crmv_register['state'] . '-' . $crmv_register['crmv'] : "New CRMV" ?></title>
+</head>
+
+<body class="bg-html">
+    <?php require __DIR__ . "/../Components/nav.phtml" ?>
+    <main class="grow my-8 flex justify-center items-center">
+        <div class="w-full max-w-lg card rounded-2xl p-8 space-y-6">
+            <!-- Formulário de CRMV -->
+            <form action="<?= isset($update) && $update ? route("crmv-register.save", ['crmv_register' => $crmv_register['id']]) : route("crmv-register.store") ?>" class="space-y-6" method="post">
+                <h1 class="font-bold text-3xl text-center text-gray-800 dark:text-gray-200 mb-6">
+                    <?= isset($update) && $update ? "Update CRMV" : "Register New CRMV" ?>
+                </h1>
+
+                <!-- Campo CRMV Number -->
+                <label class="form-label">
+                    <span class="text-gray-700 dark:text-gray-300 font-semibold">CRMV Number</span>
+                    <input name="crmv" type="text" placeholder="Enter CRMV Number" class="form-input mt-2 px-4 py-2" value="<?= isset($crmv_register['crmv']) ? $crmv_register['crmv'] : '' ?>">
+                </label>
+
+                <!-- Mensagem de erro para CRMV -->
+                <?php if (isset($errors["crmv"])): ?>
+                    <span class="error-message text-sm text-red-500 dark:text-red-400"><?= $errors['crmv'] ?></span>
+                <?php endif; ?>
+
+                <!-- Campo State -->
+                <label class="form-label">
+                    <span class="text-gray-700 dark:text-gray-300 font-semibold">State</span>
+                    <select name="state" class="form-input mt-2 px-4 py-2">
+                        <?php foreach ($states as $state): ?>
+                            <option value="<?= $state ?>" <?= isset($crmv_register['state']) && $crmv_register['state'] === $state ? 'selected' : '' ?>>
+                                <?= $state ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+
+                <!-- Botão de Submit -->
+                <button type="submit" class="button w-full py-3 text-lg font-semibold">
+                    <?= isset($update) && $update ? "Update" : "Register" ?>
+                </button>
+            </form>
+
+            <!-- Botão de Delete (se estiver no modo de atualização) -->
+            <?php if (isset($update) && $update): ?>
+                <form method="post" action="<?= route('crmv-register.destroy', ['crmv_register' => $crmv_register['id']]) ?>" class="mt-6">
+                    <input hidden name="_method" value="DELETE">
+                    <button type="submit" class="button w-full py-3 text-lg font-semibold bg-red-600/90 hover:bg-red-600 focus:ring-red-500">
+                        Delete
+                    </button>
+                </form>
+            <?php endif; ?>
+        </div>
+    </main>
+</body>
+
+</html>

@@ -13,7 +13,7 @@ class UserTokenPopulate
 
         foreach ($users as $user) {
             for ($i = 0; $i < 2; $i++) {
-                $token = UserToken::make($user->id);
+                $token = UserToken::withRandomToken($user->id);
                 $token->save();
             }
         }

@@ -8,6 +8,7 @@ use Core\Constants\Constants;
 use Core\Http\Request;
 use Core\Http\Response;
 use Lib\Authentication\Auth;
+use Lib\Random;
 use Tests\TestCase;
 
 abstract class ControllerTestCase extends TestCase
@@ -32,15 +33,31 @@ abstract class ControllerTestCase extends TestCase
 
     public function login(): User
     {
-        $user = User::factory();
+        $user = User::factory()->create();
 
-        $user->save();
-
-        $token = UserToken::make($user->id);
+        $token = UserToken::withRandomToken($user->id);
 
         $token->save();
 
         Auth::login($token->token);
+
+        return $user;
+    }
+
+    public function loginVet(): User
+    {
+        $user = $this->login();
+
+        $vet = $user->vet()->new([]);
+
+        $crmv_register = $vet->CRMVRegisters()->new([
+            'crmv' => Random::CRMV(),
+            "state" => Random::state()
+        ]);
+
+        $vet->attachCRMVRegister($crmv_register);
+
+        $vet->save();
 
         return $user;
     }

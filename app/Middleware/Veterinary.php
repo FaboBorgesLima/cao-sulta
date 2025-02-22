@@ -11,7 +11,7 @@ class Veterinary implements Middleware
     public function handle(Request $request): void
     {
         if (!Auth::isVet()) {
-            $this->redirectTo(route('auth.new'));
+            $this->redirectTo(route('auth.login'));
         }
     }
 

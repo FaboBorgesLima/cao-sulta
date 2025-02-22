@@ -16,7 +16,7 @@ class UserControllerTest extends ControllerTestCase
     public function test_show(): void
     {
         // can show without being logged
-        $user = User::factory();
+        $user = User::factory()->make();
 
         $user->save();
 
@@ -48,7 +48,7 @@ class UserControllerTest extends ControllerTestCase
         /** @var \App\Models\Vet */
         $vet = $user->vet()->new([]);
 
-        $vet->attachCRMVRegister(new CRMVRegister(["state" => "SP", "crmv" => "2024123"]));
+        $vet->attachCRMVRegister(CRMVRegister::make(["state" => "SP", "crmv" => "2024123"]));
 
         $this->assertTrue($vet->save());
 
@@ -97,11 +97,11 @@ class UserControllerTest extends ControllerTestCase
     public function test_dashboard(): void
     {
 
-        $user = User::factory();
+        $user = User::factory()->make();
 
         $user->save();
 
-        $token = UserToken::make($user->id);
+        $token = UserToken::withRandomToken($user->id);
 
         $token->save();
 

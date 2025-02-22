@@ -27,6 +27,32 @@ class Validations
         return true;
     }
 
+    public static function int($attribute, $obj): void
+    {
+        if (!$obj->$attribute) {
+            return;
+        }
+
+        if ((int) $obj->$attribute != $obj->$attribute) {
+            $obj->addError($attribute, "deve ser um numero inteiro.");
+            return;
+        }
+
+        $obj->$attribute = (int)$obj->$attribute;
+    }
+
+    public static function bool($attribute, $obj): void
+    {
+        if (!$obj->$attribute) {
+            return;
+        }
+
+        if (gettype($obj->$attribute) != 'bool' && $obj->$attribute != 0 && $obj->$attribute != 1) {
+            $obj->addError($attribute, "deve ser um booleano.");
+            return;
+        }
+    }
+
     public static function email($attribute, $obj): void
     {
         if (!$obj->$attribute) {

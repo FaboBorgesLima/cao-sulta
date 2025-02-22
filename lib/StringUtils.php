@@ -20,6 +20,17 @@ class StringUtils
         return $camel_case;
     }
 
+    public static function intToStringPaddingLeft(int $n, int $padding): string
+    {
+        $str = (string) $n;
+
+        for ($i = strlen($str); $i < $padding; $i++) {
+            $str = "0" . $str;
+        }
+
+        return $str;
+    }
+
     public static function isNumeric(string $str): bool
     {
         return ! (bool) preg_match('/[^0-9]/', $str);

@@ -11,7 +11,7 @@ class Authenticate implements Middleware
     public function handle(Request $request): void
     {
         if (!Auth::check()) {
-            $this->redirectTo(route('auth.new'));
+            $this->redirectTo(route('auth.login'));
         }
     }
 

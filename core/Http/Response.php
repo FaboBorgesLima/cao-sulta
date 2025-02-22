@@ -2,14 +2,14 @@
 
 namespace Core\Http;
 
+use App\Models\User;
 use Core\Constants\Constants;
-
-use function PHPUnit\Framework\returnSelf;
+use Lib\Authentication\Auth;
 
 class Response
 {
     protected static bool $sended = false;
-
+    protected ?User $user = null;
 
     /**
      * @param array<string,string> $headers
@@ -62,6 +62,37 @@ class Response
         return $res;
     }
 
+    public static function error(int $code, string $msg = "", bool $json = false): Response
+    {
+        $data = [
+            "msg" => $msg,
+            "code" => $code
+        ];
+
+        $res = $json ? static::json($data) : static::render("error", $data);
+
+        $res->code = $code;
+
+        return $res;
+    }
+
+    public static function notFound(string $msg = "", bool $json = false): Response
+    {
+        return static::error(404, $msg, $json);
+    }
+
+    public static function forbidden(string $msg = "", bool $json = false): Response
+    {
+        return static::error(403, $msg, $json);
+    }
+
+    public function withUser(): self
+    {
+        $this->user = Auth::user();
+
+        return $this;
+    }
+
     public function removeHeader(string $name): ?string
     {
         if (array_key_exists($name, $this->headers)) {
@@ -108,6 +139,10 @@ class Response
 
         if ($this->data) {
             extract($this->data);
+        }
+
+        if ($this->user) {
+            extract(["user" => $this->user->toArray()]);
         }
 
         if ($this->file) {

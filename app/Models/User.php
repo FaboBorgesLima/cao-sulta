@@ -2,18 +2,20 @@
 
 namespace App\Models;
 
+use Core\Database\ActiveRecord\Factory;
 use Core\Database\ActiveRecord\HasMany;
 use Core\Database\ActiveRecord\HasOne;
 use Core\Database\ActiveRecord\Model;
-use Core\Database\ActiveRecord\HasFactory;
+use Database\Factory\UserFactory;
 use Lib\CPF;
 use Lib\Random;
 use Lib\Validations;
 
-class User extends Model implements HasFactory
+class User extends Model
 {
     protected static string $table = "users";
     protected static array $columns = ["name", "email", "cpf"];
+    protected static array $hidden = ["email", "cpf"];
 
     public function validates(): void
     {
@@ -27,20 +29,25 @@ class User extends Model implements HasFactory
         Validations::name("name", $this);
     }
 
-    public static function factory(): self
+    /**
+     * @return Factory<self>
+     */
+    public static function factory(): Factory
     {
-        return new User([
-            "email" => Random::email(),
-            "cpf" => CPF::getRandomCPF(),
-            "name" => Random::name()
-        ]);
+        return new UserFactory();
     }
 
+    /**
+     * @return HasMany<UserToken>
+     */
     public function userTokens(): HasMany
     {
         return $this->hasMany(UserToken::class, "user_id");
     }
 
+    /**
+     * @return HasOne<Vet>
+     */
     public function vet(): HasOne
     {
         return $this->hasOne(Vet::class, "user_id");
@@ -51,8 +58,19 @@ class User extends Model implements HasFactory
         return (bool) $this->vet()->get();
     }
 
+    /**
+     * @return HasMany<Pet>
+     */
     public function pets(): HasMany
     {
         return $this->hasMany(Pet::class, "user_id");
+    }
+
+    /**
+     * @return HasMany<Permission>
+     */
+    public function permissions(): HasMany
+    {
+        return $this->hasMany(Permission::class, "user_id");
     }
 }

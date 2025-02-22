@@ -13,7 +13,7 @@ class UserTest extends TestCase
     public function test_can_crud(): void
     {
         // create
-        $user = new User([
+        $user = User::make([
             "name" => "fulano",
             "email" => "fake@fake.com",
             "cpf" => CPF::getRandomCPF()
@@ -42,7 +42,7 @@ class UserTest extends TestCase
     public function test_factory_works(): void
     {
         for ($i = 0; $i < 10; $i++) {
-            $user = User::factory();
+            $user = User::factory()->make();
 
             $this->assertTrue($user->save());
         }
@@ -50,17 +50,13 @@ class UserTest extends TestCase
 
     public function test_is_vet_method(): void
     {
-        $user = User::factory();
-
-        $user->save();
+        $user = User::factory()->create();
 
         $this->assertFalse($user->isVet());
         /** @var \App\Models\Vet */
         $vet = $user->vet()->new([]);
 
-        $crmvRegister = new CRMVRegister(["crmv" => "2024001", "state" => "SP"]);
-
-        $vet->attachCRMVRegister($crmvRegister);
+        $vet->attachCRMVRegister(CRMVRegister::make(["crmv" => "2024001", "state" => "SP"]));
 
         $vet->save();
 
@@ -69,7 +65,7 @@ class UserTest extends TestCase
 
     public function test_cannot_put_wrong_name(): void
     {
-        $user = User::factory();
+        $user = User::factory()->make();
 
         $this->assertTrue($user->save());
 
@@ -88,7 +84,7 @@ class UserTest extends TestCase
 
     public function test_cannot_put_wrong_email(): void
     {
-        $user = User::factory();
+        $user = User::factory()->make();
 
         $this->assertTrue($user->save());
 
@@ -108,7 +104,7 @@ class UserTest extends TestCase
 
         $this->assertTrue($user->save());
 
-        $user2 = User::factory();
+        $user2 = User::factory()->make();
 
         $user2->email = "email@email.com";
 
@@ -118,12 +114,12 @@ class UserTest extends TestCase
     public function test_cannot_have_same_email(): void
     {
 
-        $user = User::factory();
+        $user = User::factory()->make();
 
         $this->assertTrue($user->save());
         $this->assertTrue($user->save());
 
-        $user2 = User::factory();
+        $user2 = User::factory()->make();
 
         $user2->email = $user->email;
 
@@ -132,7 +128,7 @@ class UserTest extends TestCase
 
     public function test_cannot_put_wrong_cpf(): void
     {
-        $user = User::factory();
+        $user = User::factory()->make();
 
         $this->assertTrue($user->save());
 
@@ -155,15 +151,55 @@ class UserTest extends TestCase
 
     public function test_cannot_have_same_cpf(): void
     {
-        $user = User::factory();
+        $user = User::factory()->make();
 
         $this->assertTrue($user->save());
         $this->assertTrue($user->save());
 
-        $user2 = User::factory();
+        $user2 = User::factory()->make();
 
         $user2->cpf = $user->cpf;
 
         $this->assertFalse($user2->save());
+    }
+
+    public function test_to_array_works(): void
+    {
+        $user = User::factory()->make();
+
+        $this->assertTrue($user->save());
+        $expected = ['id', 'updated_at', "created_at", "name"];
+        $actual = array_keys($user->toArray());
+
+        sort($actual);
+        sort($expected);
+
+        $this->assertArrayIsEqualToArrayIgnoringListOfKeys(
+            $expected,
+            $actual,
+            ["just-for-phpstan"]
+        );
+    }
+
+    public function test_to_array_can_send_email(): void
+    {
+        $user = User::factory()->make();
+
+        $this->assertTrue($user->save());
+
+        $this->assertArrayNotHasKey("email", $user->toArray());
+
+        $this->assertArrayHasKey("email", $user->makeVisible("email")->toArray());
+    }
+
+    public function test_can_hidde_attributtes(): void
+    {
+        $user = User::factory()->make();
+
+        $this->assertTrue($user->save());
+
+        $this->assertArrayHasKey("name", $user->toArray());
+
+        $this->assertArrayNotHasKey("name", $user->makeHidden("name")->toArray());
     }
 }

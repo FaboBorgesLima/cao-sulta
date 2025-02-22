@@ -3,6 +3,7 @@
 namespace Core\Database\ActiveRecord;
 
 use Core\Database\Database;
+use Core\Database\QueryBuilder\ConditionFactory;
 use Lib\Paginator;
 use Lib\StringUtils;
 use Lib\Timestamp;
@@ -12,7 +13,7 @@ use ReflectionMethod;
 /**
  * Class Model
  * @package Core\Database\ActiveRecord
- * @property int $id
+ * @property ?int $id
  */
 abstract class Model
 {
@@ -26,22 +27,76 @@ abstract class Model
     private array $attributes = [];
 
     protected static string $table = '';
-    /** @var array<int, string> */
+    /** @var array<int,string> */
     protected static array $columns = [];
+
+    /** @var array<string,string|int|float|bool> */
+    protected static array $default = [];
+
+    /** @var array<int,string> */
+    protected static array $hidden = [];
+
+    /** @var array<string,mixed> */
+    private array $hide = [];
 
     /**
      * @param array<string, mixed> $params
      */
-    public function __construct($params = [])
+    private function __construct($params = [])
     {
-        // Initialize attributes with null from database columns
+        $this->hide = array_flip(static::$hidden);
+
+
+        // Initialize attributes with null or default from database columns
         foreach (static::$columns as $column) {
             $this->attributes[$column] = null;
+        }
+
+        foreach (static::$default as $column => $value) {
+            $this->__set($column, $value);
         }
 
         foreach ($params as $property => $value) {
             $this->__set($property, $value);
         }
+    }
+
+    /* ------------------- SERIALIZATION METHODS ------------------- */
+
+    /**
+     * @return array<string,mixed>
+     */
+    public function toArray(): array
+    {
+        /** @var array<string,mixed> */
+        $arr = [
+            "id" => $this->id,
+            "updated_at" => $this->updated_at,
+            "created_at" => $this->created_at
+        ];
+
+        foreach ($this->attributes as $name => $value) {
+
+            if (!key_exists($name, $this->hide)) {
+                $arr[$name] = $value;
+            }
+        }
+
+        return $arr;
+    }
+
+    public function makeVisible(string $attribute): self
+    {
+        unset($this->hide[$attribute]);
+
+        return $this;
+    }
+
+    public function makeHidden(string $attribute): self
+    {
+        $this->hide[$attribute] = null;
+
+        return $this;
     }
 
     /* ------------------- MAGIC METHODS ------------------- */
@@ -63,7 +118,8 @@ abstract class Model
             $allowedTypes = [
                 'Core\Database\ActiveRecord\BelongsTo',
                 'Core\Database\ActiveRecord\HasMany',
-                'Core\Database\ActiveRecord\BelongsToMany'
+                'Core\Database\ActiveRecord\BelongsToMany',
+                'Core\Database\ActiveRecord\HasOne'
             ];
 
             if ($returnType !== null && in_array($returnType->getName(), $allowedTypes)) {
@@ -128,7 +184,7 @@ abstract class Model
 
     public function hasErrors(): bool
     {
-        return empty($this->errors);
+        return !empty($this->errors);
     }
 
     public function errors(string $index = null): string | null
@@ -209,6 +265,32 @@ abstract class Model
         }
         return false;
     }
+
+
+    /**
+     * will only make the model, without saving
+     * @param array<string, mixed> $params
+     * @return static
+     */
+    public static function make($params): Model
+    {
+        return new static($params);
+    }
+
+    /**
+     * will create the model, saving it
+     * @param array<string, mixed> $params
+     * @return static
+     */
+    public static function create($params): Model
+    {
+        $model = new static($params);
+
+        $model->save();
+
+        return $model;
+    }
+
 
     /**
      * @param array<string, mixed> $data
@@ -323,10 +405,10 @@ abstract class Model
     }
 
     /**
-     * @param array<string, mixed> $conditions
+     * @param array<int, mixed> $queries
      * @return array<static>
      */
-    public static function where(array $conditions): array
+    public static function where(array $queries): array
     {
         $table = static::$table;
         $attributes = implode(', ', static::$columns);
@@ -335,17 +417,29 @@ abstract class Model
             SELECT id,created_at,updated_at, {$attributes} FROM {$table} WHERE 
         SQL;
 
-        $sqlConditions = array_map(function ($column) {
-            return "{$column} = :{$column}";
-        }, array_keys($conditions));
+        $conditionFactory = ConditionFactory::fromModelAttributes(static::$columns);
+
+        $conditions = [];
+
+        if (gettype($queries[0]) != 'array') {
+            $conditions[] = $conditionFactory->fromArray($queries);
+        } else {
+            foreach ($queries as $query) {
+                $conditions[] = $conditionFactory->fromArray($query);
+            }
+        }
+        $sqlConditions = array_map(function ($condition) {
+            return $condition->__toString();
+        }, $conditions);
+
 
         $sql .= implode(' AND ', $sqlConditions);
 
         $pdo = Database::getDatabaseConn();
         $stmt = $pdo->prepare($sql);
 
-        foreach ($conditions as $column => $value) {
-            $stmt->bindValue($column, $value);
+        foreach ($conditions as $condition) {
+            $stmt->bindValue($condition->column(), $condition->value());
         }
 
         $stmt->execute();
@@ -359,11 +453,11 @@ abstract class Model
     }
 
     /**
-     * @param array<string, mixed> $conditions
+     * @param array<mixed> $query
      */
-    public static function findBy($conditions): ?static
+    public static function findBy($query): ?static
     {
-        $resp = self::where($conditions);
+        $resp = self::where($query);
         if (isset($resp[0]))
             return $resp[0];
 
@@ -371,32 +465,53 @@ abstract class Model
     }
 
     /**
-     * @param array<string, mixed> $conditions
+     * @param array<string, mixed> $query
      */
-    public static function exists($conditions): bool
+    public static function exists($query): bool
     {
-        $resp = self::where($conditions);
+        $resp = self::where([$query]);
         return !empty($resp);
     }
 
     /* ------------------- RELATIONSHIPS METHODS ------------------- */
 
+    /**
+     * @template T of Model
+     * @param class-string<T> $related
+     * @param string $foreignKey
+     * @return BelongsTo<T>
+     */
     public function belongsTo(string $related, string $foreignKey): BelongsTo
     {
         return new BelongsTo($this, $related, $foreignKey);
     }
 
+    /**
+     * @template T of Model 
+     * @param class-string<T> $related
+     * @return HasMany<T>
+     */
     public function hasMany(string $related, string $foreignKey): HasMany
     {
         return new HasMany($this, $related, $foreignKey);
     }
 
+    /**
+     * @template T of Model 
+     * @param class-string<T> $related
+     * @return HasOne<T>
+     */
     public function hasOne(string $related, string $foreignKey): HasOne
     {
         return new HasOne($this, $related, $foreignKey);
     }
 
-    public function BelongsToMany(string $related, string $pivot_table, string $from_foreign_key, string $to_foreign_key): BelongsToMany
+    /**
+     * @template T of Model 
+     * @param class-string<T> $related
+     * @return BelongsToMany<T>
+     */
+    public function belongsToMany(string $related, string $pivot_table, string $from_foreign_key, string $to_foreign_key): BelongsToMany
     {
         return new BelongsToMany($this, $related, $pivot_table, $from_foreign_key, $to_foreign_key);
     }

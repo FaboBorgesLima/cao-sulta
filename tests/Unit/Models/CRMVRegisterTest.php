@@ -10,14 +10,14 @@ class CRMVRegisterTest extends TestCase
 {
     public function test_can_crud(): void
     {
-        $user = User::factory();
+        $user = User::factory()->make();
 
         $user->save();
 
         /** @var \App\Models\Vet */
         $vet = $user->vet()->new([]);
 
-        $vet->attachCRMVRegister(new CRMVRegister(["crmv" => "2024001", "state" => "SP"]));
+        $vet->attachCRMVRegister(CRMVRegister::make(["crmv" => "2024001", "state" => "SP"]));
 
         $this->assertTrue($vet->save());
 
@@ -38,14 +38,14 @@ class CRMVRegisterTest extends TestCase
 
     public function test_cannot_leave_vet_without_cmrv(): void
     {
-        $user = User::factory();
+        $user = User::factory()->make();
 
         $user->save();
 
         /** @var \App\Models\Vet */
         $vet = $user->vet()->new([]);
 
-        $vet->attachCRMVRegister(new CRMVRegister(["crmv" => "2024001", "state" => "SP"]));
+        $vet->attachCRMVRegister(CRMVRegister::make(["crmv" => "2024001", "state" => "SP"]));
 
         $this->assertTrue($vet->save());
 
@@ -60,14 +60,14 @@ class CRMVRegisterTest extends TestCase
 
     public function test_cannot_create_with_invalid_data(): void
     {
-        $user = User::factory();
+        $user = User::factory()->make();
 
         $user->save();
 
         /** @var \App\Models\Vet */
         $vet = $user->vet()->new([]);
 
-        $vet->attachCRMVRegister(new CRMVRegister(["crmv" => "2024001", "state" => "SP"]));
+        $vet->attachCRMVRegister(CRMVRegister::make(["crmv" => "2024001", "state" => "SP"]));
 
         $this->assertTrue($vet->save());
 
