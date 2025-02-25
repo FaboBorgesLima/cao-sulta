@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <?php require __DIR__ . "/../Components/head.phtml"; ?>
+    <title>Permissions <?= $user["name"] ?></title>
+</head>
+
+<body class="bg-html">
+    <?php require __DIR__ . "/../Components/nav.phtml" ?>
+    <main class="container mx-auto grow my-8 px-4 space-y-8">
+        <!-- Seção de Solicitações de Permissão para Usuários -->
+        <?php if (isset($vet)): ?>
+            <div class=" card shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">Permission Requests to Users</h2>
+                <div class="space-y-4">
+                    <?php foreach ($vet['permissionsUsers'] as $user): ?>
+                        <div class="card p-4 flex items-center justify-between bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:shadow-md transition-shadow duration-300">
+                            <span class="text-gray-700 dark:text-gray-300 font-medium"><?= $user['name'] ?></span>
+                            <button class="button px-4 py-2 text-sm">Delete</button>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <!-- Seção de Veterinários Que Pediram Permissão -->
+        <div class=" rounded-2xl card p-6">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">Vets Permission Request</h2>
+            <div class="space-y-4">
+                <?php foreach ($permissionsVets as $vet): ?>
+                    <button data-user="<?= $user['id'] ?>" data-vet="<?= $vet['id'] ?>" class="card p-4 flex items-center justify-between bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:shadow-md transition-shadow duration-300">
+                        <span class="text-gray-700 dark:text-gray-300 font-medium"><?= $vet['user']["name"] ?></span>
+                        <span class="text-blue-600 dark:text-blue-400 text-sm">View Details</span>
+                    </button>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

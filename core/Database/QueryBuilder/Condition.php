@@ -22,9 +22,14 @@ class Condition
         return $this->value;
     }
 
+    public function placeholder(): string
+    {
+        return ':' . str_replace('.', "dot", $this->column());
+    }
+
     public function __toString()
     {
 
-        return "$this->column $this->operator :$this->column";
+        return "$this->column $this->operator {$this->placeholder()}";
     }
 }

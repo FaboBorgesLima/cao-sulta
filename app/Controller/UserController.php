@@ -10,9 +10,25 @@ use Lib\Authentication\Auth;
 
 class UserController extends Controller
 {
+    public function index(Request $request): Response
+    {
+        $page_n = (int) $request->getParam('page');
+        $email = (string) $request->getParam('email', '');
+
+        $paginator = User::paginate(10, ['email', 'LIKE', "%$email%"]);
+
+        $page = $paginator->getPage($page_n);
+
+        return Response::render('user/index', [
+            'page' => $page,
+        ]);
+    }
+
     public function show(Request $request): Response
     {
         $profile = User::findById((int) $request->getParam("id"));
+
+
 
         $data = [
             "profile" => [
@@ -20,11 +36,17 @@ class UserController extends Controller
                 "id" => $request->getParam("id"),
             ],
             "is_vet" => false,
+            "show_permission_request" => false
         ];
 
         if (!$profile) {
             return Response::render("user/show", $data)->withUser();
         }
+
+        if ($request->user() && $request->user()->id != $profile->id && $vet = $request->user()->vet()->get()) {
+            $data['show_permission_request'] = ! (bool) $profile->permissionsVets()->where(['vets.id', '=', $vet->id]);
+        }
+
 
         $data["is_vet"] = $profile->isVet();
         $data["profile"] = $profile->toArray();

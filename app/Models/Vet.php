@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Core\Database\ActiveRecord\BelongsTo;
 use Core\Database\ActiveRecord\HasMany;
+use Core\Database\ActiveRecord\HasManyThrough;
 use Core\Database\ActiveRecord\Model;
 use Lib\Validations;
 
@@ -43,6 +44,7 @@ class Vet extends Model
 
         return false;
     }
+
     public function save(): bool
     {
         $save = parent::save();
@@ -81,5 +83,13 @@ class Vet extends Model
     public function permissions(): HasMany
     {
         return $this->hasMany(Permission::class, "vet_id");
+    }
+
+    /**
+     * @return HasManyThrough<User,Permission>
+     */
+    public function permissionsUsers(): HasManyThrough
+    {
+        return $this->hasManyThrough(User::class, Permission::class, "vet_id", "user_id");
     }
 }

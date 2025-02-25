@@ -17,7 +17,10 @@ class VetPopulate
             /** @var \App\Models\Vet */
             $vet = $users[$i * 2]->vet()->new([]);
 
-            $vet->attachCRMVRegister(CRMVRegister::make(["crmv" => "202200$i", "state" => Random::state()]));
+            $vet->attachCRMVRegister(CRMVRegister::make([
+                "crmv" => Random::CRMV(),
+                "state" => Random::state()
+            ]));
 
             $vet->save();
         }

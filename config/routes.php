@@ -2,6 +2,7 @@
 
 use App\Controller\AuthenticationController;
 use App\Controller\CRMVRegisterController;
+use App\Controller\PermissionController;
 use App\Controller\PetController;
 use App\Controller\StaticPagesController;
 use App\Controller\UserController;
@@ -15,6 +16,7 @@ Route::get("/register", [StaticPagesController::class, "register"])->name("regis
 Route::get("/user/create", [UserController::class, "create"])->name("user.create");
 Route::get("/user/{id}", [UserController::class, "show"])->name("user.show");
 Route::post("/user/store", [UserController::class, "store"])->name("user.store");
+Route::get("/user", [UserController::class, "index"])->name("user.index");
 
 // ---------- Auth
 Route::get("/auth", [AuthenticationController::class, "login"])->name("auth.login");
@@ -47,6 +49,13 @@ Route::middleware("auth")->group(function () {
 
     // ---------- Auth
     Route::get("/logout", [AuthenticationController::class, "logout"])->name("auth.logout");
+
+    // ---------- Permission
+
+    Route::get("/permission", [PermissionController::class, 'index'])->name("permission.index");
+    Route::post("/permission/create", [PermissionController::class, 'store'])->name("permission.store");
+    Route::put("/vet/{vet}/user/{user}/permission", [PermissionController::class, 'update'])->name("permission.update");
+    Route::delete("/vet/{vet}/user/{user}/permission", [PermissionController::class, 'delete'])->name("permission.update");
 });
 
 Route::middleware("vet")->group(function () {

@@ -30,6 +30,12 @@
                 <h2 class="font-bold">Pets</h2>
                 <p>User pets.</p>
             </a>
+            <?php if ($show_permission_request): ?>
+                <form action="<?= route("permission.store") ?>" method="post" class="flex flex-col gap-4 card p-4 fancy-hover-color-transition">
+                    <input name="user" class="hidden" value="<?= $profile['id'] ?>">
+                    <button>request permission</button>
+                </form>
+            <?php endif; ?>
         </div>
     </main>
 

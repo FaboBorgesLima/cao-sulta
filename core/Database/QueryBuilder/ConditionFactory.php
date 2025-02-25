@@ -20,8 +20,33 @@ class ConditionFactory
         $attributesHashMap["id"] = null;
         return new ConditionFactory($attributesHashMap);
     }
+
+    public static function make(): ConditionFactory
+    {
+        return new ConditionFactory([], false);
+    }
+
     /**
-     * @param array<int,string|int>|array<int,array<int|string>> $columnConditionValue
+     * @param array<int,string|int>|array<int,array<int|string>> $queries
+     * @return array<int,Condition>
+     */
+    public function fromConditions($queries): array
+    {
+        $conditions = [];
+
+        if (gettype($queries[0]) != 'array') {
+            $conditions[] = $this->fromArray($queries);
+        } else {
+            foreach ($queries as $query) {
+                $conditions[] = $this->fromArray($query);
+            }
+        }
+
+        return $conditions;
+    }
+
+    /**
+     * @param array<int,string|int> $columnConditionValue
      */
     public function fromArray(array $columnConditionValue): Condition
     {

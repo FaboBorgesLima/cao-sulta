@@ -45,4 +45,29 @@ class PermissionTest extends TestCase
 
         $this->assertNull(Permission::findById($permission->id));
     }
+
+    public function test_relationship(): void
+    {
+        $user = User::factory()->create();
+        $vet = VetFactory::create();
+
+        $vet->attachCRMVRegister(CRMVRegister::make([
+            "crmv" => Random::CRMV(),
+            "state" => Random::state()
+        ]));
+
+        $vet->save();
+
+        $permission = $user->permissions()->new(["vet_id" => $vet->id, "accepted" => 0]);
+
+        $permission->save();
+
+        $this->assertEquals(1, count($user->permissionsVets()->get()));
+        $this->assertEquals(1, count($vet->permissionsUsers()->get()));
+
+        $user->permissions()->new(["vet_id" => $vet->id, "accepted" => 0])->save();
+
+        $this->assertEquals(1, count($user->permissionsVets()->get()));
+        $this->assertEquals(1, count($vet->permissionsUsers()->get()));
+    }
 }

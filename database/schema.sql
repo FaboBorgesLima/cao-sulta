@@ -54,7 +54,8 @@ CREATE TABLE permissions (
     vet_id INT NOT NULL,
     accepted BOOLEAN DEFAULT 0,
     FOREIGN KEY (vet_id) REFERENCES vets(id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    UNIQUE (vet_id, user_id)
 );
 
 DROP TABLE IF EXISTS pets;

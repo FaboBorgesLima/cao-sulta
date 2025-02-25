@@ -81,6 +81,11 @@ class Response
         return static::error(404, $msg, $json);
     }
 
+    public static function badRequest(string $msg = "", bool $json = false): Response
+    {
+        return static::error(400, $msg, $json);
+    }
+
     public static function forbidden(string $msg = "", bool $json = false): Response
     {
         return static::error(403, $msg, $json);
