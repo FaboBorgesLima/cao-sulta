@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Models\Permission;
 use App\Models\User;
 use Core\Http\Controllers\Controller;
 use Core\Http\Request;
@@ -36,7 +37,7 @@ class UserController extends Controller
                 "id" => $request->getParam("id"),
             ],
             "is_vet" => false,
-            "show_permission_request" => false
+            "sended_permission" => null
         ];
 
         if (!$profile) {
@@ -44,7 +45,15 @@ class UserController extends Controller
         }
 
         if ($request->user() && $request->user()->id != $profile->id && $vet = $request->user()->vet()->get()) {
-            $data['show_permission_request'] = ! (bool) $profile->permissionsVets()->where(['vets.id', '=', $vet->id]);
+
+            $result = Permission::where([
+                ['vet_id', '=', $vet->id],
+                ['user_id', '=', $profile->id]
+            ]);
+
+            if ($result) {
+                $data['sended_permission'] = $result[0];
+            }
         }
 
 

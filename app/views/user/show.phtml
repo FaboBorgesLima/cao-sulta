@@ -30,11 +30,21 @@
                 <h2 class="font-bold">Pets</h2>
                 <p>User pets.</p>
             </a>
-            <?php if ($show_permission_request): ?>
-                <form action="<?= route("permission.store") ?>" method="post" class="flex flex-col gap-4 card p-4 fancy-hover-color-transition">
-                    <input name="user" class="hidden" value="<?= $profile['id'] ?>">
-                    <button>request permission</button>
-                </form>
+            <?php if (isset($user) && $user['is_vet'] && $user['id'] != $profile['id']): ?>
+                <?php if (!$sended_permission): ?>
+                    <form action="<?= route("permission.store") ?>" method="post" class="flex flex-col gap-4 card p-4 fancy-hover-color-transition">
+                        <input name="user" class="hidden" value="<?= $profile['id'] ?>">
+                        <button>request permission</button>
+                    </form>
+                <?php else: ?>
+                    <div class="flex flex-col gap-4 card p-4 fancy-hover-color-transition">
+                        <?php if ($sended_permission->accepted): ?>
+                            permission accepted
+                        <?php else: ?>
+                            permission requested
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
             <?php endif; ?>
         </div>
     </main>

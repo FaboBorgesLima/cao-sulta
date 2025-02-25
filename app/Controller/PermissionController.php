@@ -13,10 +13,18 @@ class PermissionController extends Controller
     {
 
         $data['permissionsVets'] = array_map(
-            fn($vet) => array_merge($vet->toArray(), ["user" => $vet->user()->get()->toArray()]),
+            function ($vet) {
+                $user = $vet->user()->get();
+                return array_merge($vet->toArray(), [
+                    "user" => $user->toArray(),
+                    "permission" => Permission::where([
+                        ['vet_id', '=', $vet->id],
+                        ['user_id', '=', $user->id]
+                    ])[0]->toArray()
+                ]);
+            },
             $request->user()->permissionsVets()->get()
         );
-
 
         $vet = $request->user()->vet()->get();
 

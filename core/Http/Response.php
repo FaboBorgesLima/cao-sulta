@@ -147,7 +147,10 @@ class Response
         }
 
         if ($this->user) {
-            extract(["user" => $this->user->toArray()]);
+            extract(["user" => array_merge(
+                $this->user->toArray(),
+                ["is_vet" => $this->user->isVet()]
+            )]);
         }
 
         if ($this->file) {
