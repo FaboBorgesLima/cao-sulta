@@ -30,6 +30,52 @@
                 <h2 class="font-bold">Pets</h2>
                 <p>User pets.</p>
             </a>
+            <?php if (isset($user) && $user['is_vet'] && $user['id'] != $profile['id']): ?>
+
+                <?php if (!$sended_permission): ?>
+                    <!-- Formulário de Solicitação -->
+                    <form action="<?= route("permission.store") ?>" method="post"
+                        class="card p-4 flex flex-col gap-4 transition-all duration-300 hover:shadow-lg">
+                        <input type="hidden" name="user" value="<?= $profile['id'] ?>">
+
+                        <button type="submit"
+                            class="button w-full flex items-center justify-center gap-2 group">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                            Request Veterinary Permission
+                        </button>
+                    </form>
+                <?php else: ?>
+                    <!-- Status da Permissão -->
+                    <div class="card p-4 flex items-center justify-between <?= $sended_permission->accepted ? 'bg-green-50 dark:bg-green-800/20' : 'bg-yellow-50 dark:bg-yellow-800/20' ?>">
+                        <div class="flex items-center gap-2">
+                            <?php if ($sended_permission->accepted): ?>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span class="text-green-600 dark:text-green-400 font-medium">
+                                    Permission Granted
+                                </span>
+                            <?php else: ?>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-600 dark:text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span class="text-yellow-600 dark:text-yellow-400 font-medium">
+                                    Pending Approval
+                                </span>
+                            <?php endif; ?>
+                        </div>
+
+                        <?php if (!$sended_permission->accepted): ?>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">
+                                Sent <?= $sended_permission->created_at->toMysqlTimestamp() ?>
+                            </span>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+
+            <?php endif; ?>
         </div>
     </main>
 

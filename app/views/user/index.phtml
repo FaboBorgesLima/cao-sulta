@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <?php require __DIR__ . "/../Components/head.phtml"; ?>
+    <title>Users</title>
+</head>
+
+<body class="bg-html">
+    <main class="grow flex flex-col gap-4">
+        <?php require __DIR__ . "/../Components/nav.phtml"; ?>
+        <div class="container mx-auto grow flex flex-col gap-4 p-4">
+            <!-- Formulário de Busca -->
+            <form method="get" class="card shadow-lg p-6">
+                <div class="flex items-center gap-4">
+                    <input name="email" placeholder="Search by email" class="form-input flex-grow px-4 py-2" value="<?= $email ?? '' ?>">
+                    <button type="submit" class="button px-4 py-2">Search</button>
+                </div>
+            </form>
+
+            <!-- Título da Página -->
+            <?php if (isset($email)): ?>
+                <h1 class="font-bold text-2xl text-gray-800 dark:text-gray-200">Users with email like "<?= $email ?>"</h1>
+            <?php endif; ?>
+
+            <!-- Lista de Usuários -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <?php foreach ($page->content as $user): ?>
+                    <a href="<?= route('user.show', ['id' => $user->id]) ?>" class="card p-4 flex items-center justify-between bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:shadow-md transition-shadow duration-300">
+                        <span class="text-gray-700 dark:text-gray-300 font-medium"><?= $user->name ?></span>
+                        <span class="text-blue-600 dark:text-blue-400 text-sm">View Profile</span>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </main>
+    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-4 sticky bottom-0">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-center gap-4">
+                <!-- Botão Previous -->
+                <?php if ($page->n != 0): ?>
+                    <a href="<?= route('user.index', ['page' => $page->n - 1]) ?>"
+                        class="button px-4 py-2 flex items-center gap-2 hover:bg-blue-600/90 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        Previous
+                    </a>
+                <?php else: ?>
+                    <span class="button px-4 py-2 opacity-50 cursor-not-allowed">
+                        Previous
+                    </span>
+                <?php endif; ?>
+
+                <!-- Número da Página -->
+                <span class="text-gray-600 dark:text-gray-400 font-semibold">
+                    Page <?= $page->n + 1 ?>
+                </span>
+
+                <!-- Botão Next -->
+                <?php if ($page->hasNext): ?>
+                    <a href="<?= route('user.index', ['page' => $page->n + 1]) ?>"
+                        class="button px-4 py-2 flex items-center gap-2 hover:bg-blue-600/90 transition-colors">
+                        Next
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                <?php else: ?>
+                    <span class="button px-4 py-2 opacity-50 cursor-not-allowed">
+                        Next
+                    </span>
+                <?php endif; ?>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

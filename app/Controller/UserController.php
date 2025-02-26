@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Models\Permission;
 use App\Models\User;
 use Core\Http\Controllers\Controller;
 use Core\Http\Request;
@@ -10,9 +11,25 @@ use Lib\Authentication\Auth;
 
 class UserController extends Controller
 {
+    public function index(Request $request): Response
+    {
+        $page_n = (int) $request->getParam('page');
+        $email = (string) $request->getParam('email', '');
+
+        $paginator = User::paginate(10, ['email', 'LIKE', "%$email%"]);
+
+        $page = $paginator->getPage($page_n);
+
+        return Response::render('user/index', [
+            'page' => $page,
+        ]);
+    }
+
     public function show(Request $request): Response
     {
         $profile = User::findById((int) $request->getParam("id"));
+
+
 
         $data = [
             "profile" => [
@@ -20,11 +37,24 @@ class UserController extends Controller
                 "id" => $request->getParam("id"),
             ],
             "is_vet" => false,
+            "sended_permission" => null
         ];
 
         if (!$profile) {
             return Response::render("user/show", $data)->withUser();
         }
+
+        if ($request->user() && $request->user()->id != $profile->id && $vet = $request->user()->vet()->get()) {
+            $result = Permission::where([
+                ['vet_id', '=', $vet->id],
+                ['user_id', '=', $profile->id]
+            ]);
+
+            if ($result) {
+                $data['sended_permission'] = $result[0];
+            }
+        }
+
 
         $data["is_vet"] = $profile->isVet();
         $data["profile"] = $profile->toArray();

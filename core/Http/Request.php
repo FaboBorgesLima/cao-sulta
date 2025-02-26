@@ -27,6 +27,11 @@ class Request
         $this->user = Auth::user();
     }
 
+    public function file(string $name): mixed
+    {
+        return isset($_FILES[$name]) ? $_FILES[$name] : null;
+    }
+
     public function getMethod(): string
     {
         return $this->method;

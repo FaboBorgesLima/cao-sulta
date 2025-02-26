@@ -9,7 +9,7 @@ use Lib\Validations;
 class Pet extends Model
 {
     protected static string $table = "pets";
-    protected static array $columns = ["user_id", "name"];
+    protected static array $columns = ["user_id", "name", "image"];
 
     public function validates(): void
     {

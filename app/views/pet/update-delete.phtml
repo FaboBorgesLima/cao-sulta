@@ -9,11 +9,15 @@
 <body>
     <?php require __DIR__ . "/../Components/nav.phtml" ?>
     <main class="grow my-4 flex justify-center items-center">
-        <form action="<?= route("pet.save", ["id" => $id]) ?>" class="card p-4 flex flex-col gap-4" method="post">
+        <form action="<?= route("pet.save", ["id" => $id]) ?>" class="card p-4 flex flex-col gap-4" method="post" enctype="multipart/form-data">
             <h1 class="font-bold text-2xl text-center">Pet</h1>
             <label class="form-label">
                 Name
                 <input name="name" type="text" placeholder="name" class="form-input" value="<?= $name ?>">
+            </label>
+            <label class="form-label">
+                Image
+                <input name="image" type="file" placeholder="name" class="form-input">
             </label>
             <?php
             if (isset($errors["name"])):

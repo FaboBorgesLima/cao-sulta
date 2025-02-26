@@ -30,6 +30,21 @@ class Permission extends Model
         Validations::uniqueness(["user_id", "vet_id"], $this);
     }
 
+
+    public function canUserDelete(User $user): bool
+    {
+
+        $vet = $user->vet()->get();
+
+        return $this->user()->get()->id == $user->id ||
+            (isset($vet) && $this->vet()->get()->id == $vet->id);
+    }
+
+    public function canUserUpdate(User $user): bool
+    {
+        return $this->user()->get()->id == $user->id;
+    }
+
     /**
      * @return BelongsTo<User>
      */

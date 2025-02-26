@@ -71,8 +71,8 @@ abstract class Model
         /** @var array<string,mixed> */
         $arr = [
             "id" => $this->id,
-            "updated_at" => $this->updated_at,
-            "created_at" => $this->created_at
+            "updated_at" => $this->updated_at ? $this->updated_at->toMysqlTimestamp() : null,
+            "created_at" => $this->created_at->toMysqlTimestamp()
         ];
 
         foreach ($this->attributes as $name => $value) {
@@ -367,7 +367,7 @@ abstract class Model
     }
 
     /**
-     * @return array<static>
+     * @return array<int,static>
      */
     public static function all(): array
     {
@@ -392,21 +392,22 @@ abstract class Model
         return $models;
     }
 
-    public static function paginate(int $page = 1, int $per_page = 10, string $route = null): Paginator
+    /**
+     * @param array<int,string|int>|array<int,array<int|string>> $conditions
+     * @return Paginator<static>
+     */
+    public static function paginate(int $length = 10, array $conditions = []): Paginator
     {
         return new Paginator(
-            class: static::class,
-            page: $page,
-            per_page: $per_page,
-            table: static::$table,
-            attributes: static::$columns,
-            route: $route
+            static::class,
+            $length,
+            $conditions
         );
     }
 
     /**
      * @param array<int, mixed> $queries
-     * @return array<static>
+     * @return array<int,static>
      */
     public static function where(array $queries): array
     {
@@ -428,6 +429,7 @@ abstract class Model
                 $conditions[] = $conditionFactory->fromArray($query);
             }
         }
+
         $sqlConditions = array_map(function ($condition) {
             return $condition->__toString();
         }, $conditions);
@@ -494,6 +496,28 @@ abstract class Model
     public function hasMany(string $related, string $foreignKey): HasMany
     {
         return new HasMany($this, $related, $foreignKey);
+    }
+
+    /**
+     * @template TRelated of Model
+     * @template TPivot of Model 
+     * @param class-string<TRelated> $related
+     * @param class-string<TPivot> $pivot
+     * @return HasManyThrough<TRelated,TPivot>
+     */
+    public function hasManyThrough(
+        string $related,
+        string $pivot,
+        string $foreignKeyModel,
+        string $foreignKeyRelated
+    ): HasManyThrough {
+        return new HasManyThrough(
+            $this,
+            $related,
+            $pivot,
+            $foreignKeyModel,
+            $foreignKeyRelated
+        );
     }
 
     /**

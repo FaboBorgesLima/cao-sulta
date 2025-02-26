@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <?php require __DIR__ . "/../Components/head.phtml"; ?>
+    <title>Permissions <?= $user["name"] ?></title>
+</head>
+
+<body class="bg-html">
+    <?php require __DIR__ . "/../Components/nav.phtml" ?>
+    <main class="container mx-auto grow my-8 px-4 space-y-8">
+        <!-- Seção de Solicitações de Permissão para Usuários -->
+        <?php if (isset($vet)): ?>
+            <div class="card shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">Permission Requests to Users</h2>
+                <div class="space-y-4">
+                    <?php foreach ($vet['permissionsUsers'] as $user): ?>
+                        <div class="card p-4 flex items-center justify-between bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:shadow-md transition-shadow duration-300">
+                            <span class="text-gray-700 dark:text-gray-300 font-medium flex-grow"><?= $user['name'] ?></span>
+                            <div class="flex items-center gap-4">
+                                <a href="<?= route('user.show', ['id' => $user['id']]) ?>" class="text-blue-600 dark:text-blue-400 text-sm hover:underline">
+                                    View Profile
+                                </a>
+                                <button data-user="<?= $user['id'] ?>" data-vet="<?= $vet['id'] ?>"
+                                    class="user-deny-permission text-red-600 dark:text-red-400 text-sm flex items-center gap-1 hover:opacity-75 transition-opacity">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    Revoke
+                                </button>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <!-- Seção de Veterinários Que Pediram Permissão -->
+        <div class="card rounded-2xl p-6">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">Vets Permission Requests</h2>
+            <div class="space-y-4">
+                <?php foreach ($permissionsVets as $vet): ?>
+                    <div data-user="<?= $user['id'] ?>" data-vet="<?= $vet['id'] ?>"
+                        class="card p-4 flex items-center justify-between bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:shadow-md transition-shadow duration-300">
+                        <span class="text-gray-700 dark:text-gray-300 font-medium flex-grow">
+                            <?= $vet['user']["name"] ?>
+                        </span>
+
+                        <div class="flex items-center gap-3">
+                            <button data-user="<?= $user['id'] ?>" data-vet="<?= $vet['id'] ?>"
+                                class="user-accept-permission text-green-600 dark:text-green-400 text-sm flex items-center gap-1 hover:opacity-75 transition-opacity">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Accept
+                            </button>
+
+                            <button data-user="<?= $user['id'] ?>" data-vet="<?= $vet['id'] ?>"
+                                class="user-deny-permission text-red-600 dark:text-red-400 text-sm flex items-center gap-1 hover:opacity-75 transition-opacity">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                                Deny
+                            </button>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

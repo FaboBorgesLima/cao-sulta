@@ -202,4 +202,24 @@ class UserTest extends TestCase
 
         $this->assertArrayNotHasKey("name", $user->makeHidden("name")->toArray());
     }
+
+    public function test_find_by_email(): void
+    {
+        $user = User::factory()->createMany(20);
+        $user = User::factory()->make();
+
+        $user->email = "findbyemail@test.com";
+
+        $user->save();
+
+        $filter_users = User::where(['email', "LIKE", "%findbyemail%"]);
+
+        $emails = [];
+
+        foreach ($filter_users as $user) {
+            $emails[] = $user->email;
+        }
+
+        $this->assertContains($user->email, $emails);
+    }
 }

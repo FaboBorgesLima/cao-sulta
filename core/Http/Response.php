@@ -81,6 +81,11 @@ class Response
         return static::error(404, $msg, $json);
     }
 
+    public static function badRequest(string $msg = "", bool $json = false): Response
+    {
+        return static::error(400, $msg, $json);
+    }
+
     public static function forbidden(string $msg = "", bool $json = false): Response
     {
         return static::error(403, $msg, $json);
@@ -142,7 +147,10 @@ class Response
         }
 
         if ($this->user) {
-            extract(["user" => $this->user->toArray()]);
+            extract(["user" => array_merge(
+                $this->user->toArray(),
+                ["is_vet" => $this->user->isVet()]
+            )]);
         }
 
         if ($this->file) {

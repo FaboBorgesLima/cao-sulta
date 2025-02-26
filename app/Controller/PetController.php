@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Models\Pet;
 use App\Models\User;
+use App\Services\Storage;
 use Core\Http\Controllers\Controller;
 use Core\Http\Request;
 use Core\Http\Response;
@@ -53,11 +54,19 @@ class PetController extends Controller
 
         $pet = Pet::create($attributes);
 
-        if (!$pet->hasErrors()) {
-            return Response::redirectTo(route("pet.index", ["id" => $user->id]));
+        if ($pet->hasErrors()) {
+            return Response::render("pet/create", ["errors" => $pet->getAllErrors()]);
         }
 
-        return Response::render("pet/create", ["errors" => $pet->getAllErrors()]);
+        $storage = new Storage('pets');
+
+        if ($request->file('image')) {
+            $pet->image = $storage->upload($request->file('image'), (string) $pet->id);
+        }
+
+        $pet->save();
+
+        return Response::redirectTo(route("pet.index", ["id" => $user->id]));
     }
 
     public function update(Request $request): Response
@@ -98,6 +107,16 @@ class PetController extends Controller
                 "name" => $pet->name,
                 "errors" => $pet->getAllErrors()
             ]);
+        }
+
+        $storage = new Storage('pets');
+
+        if ($request->file('image')) {
+            if ($pet->image) {
+                $storage->delete($pet->id . '.png');
+            }
+
+            $pet->image = $storage->upload($request->file('image'), (string) $pet->id);
         }
 
         $pet->save();

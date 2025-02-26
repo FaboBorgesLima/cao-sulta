@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Core\Database\ActiveRecord\Factory;
 use Core\Database\ActiveRecord\HasMany;
+use Core\Database\ActiveRecord\HasManyThrough;
 use Core\Database\ActiveRecord\HasOne;
 use Core\Database\ActiveRecord\Model;
 use Database\Factory\UserFactory;
@@ -72,5 +73,13 @@ class User extends Model
     public function permissions(): HasMany
     {
         return $this->hasMany(Permission::class, "user_id");
+    }
+
+    /**
+     * @return HasManyThrough<Vet,Permission>
+     */
+    public function permissionsVets(): HasManyThrough
+    {
+        return $this->hasManyThrough(Vet::class, Permission::class, "user_id", "vet_id");
     }
 }
