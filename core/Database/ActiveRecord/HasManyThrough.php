@@ -70,14 +70,17 @@ class HasManyThrough
 
     /**
      * @param array<int,string|int>|array<int,array<int|string>> $conditions
-     * @return array<int,TRelated>;
+     * @return array<int,TRelated>
      */
     public function where($conditions): array
     {
         $condition_instances = $this->conditionFactory->fromConditions($conditions);
+        $sql = '';
+
         if ($condition_instances) {
             $sql = $this->baseQuery() . ' AND ';
         }
+
         $conditions_sql_pieces = [];
 
         foreach ($condition_instances as $condition_instance) {

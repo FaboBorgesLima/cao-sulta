@@ -45,7 +45,6 @@ class UserController extends Controller
         }
 
         if ($request->user() && $request->user()->id != $profile->id && $vet = $request->user()->vet()->get()) {
-
             $result = Permission::where([
                 ['vet_id', '=', $vet->id],
                 ['user_id', '=', $profile->id]

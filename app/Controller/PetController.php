@@ -61,8 +61,7 @@ class PetController extends Controller
         $storage = new Storage('pets');
 
         if ($request->file('image')) {
-
-            $pet->image = $storage->upload($request->file('image'), $pet->id);
+            $pet->image = $storage->upload($request->file('image'), (string) $pet->id);
         }
 
         $pet->save();
@@ -108,6 +107,17 @@ class PetController extends Controller
                 "name" => $pet->name,
                 "errors" => $pet->getAllErrors()
             ]);
+        }
+
+        $storage = new Storage('pets');
+
+        if ($request->file('image')) {
+
+            if ($pet->image) {
+                $storage->delete($pet->id . '.png');
+            }
+
+            $pet->image = $storage->upload($request->file('image'), (string) $pet->id);
         }
 
         $pet->save();
