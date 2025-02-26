@@ -64,6 +64,7 @@ CREATE TABLE pets (
     id INT AUTO_INCREMENT PRIMARY KEY,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP,
+    image VARCHAR(255),
     name VARCHAR(255) NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)

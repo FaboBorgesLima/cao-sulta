@@ -40,11 +40,6 @@ class PermissionController extends Controller
         return Response::render('permission/index', $data)->withUser();
     }
 
-    public function create(): Response
-    {
-        return Response::render('permission/form');
-    }
-
     public function store(Request $request): Response
     {
         $vet = $request->user()->vet()->get();
@@ -62,22 +57,24 @@ class PermissionController extends Controller
     public function update(Request $request): Response
     {
 
-        $permission = Permission::where([
+        $permissions = Permission::where([
             ['user_id', '=', (int) $request->getParam('user')],
             ['vet_id', '=', (int) $request->getParam('vet')]
-        ])[0];
+        ]);
 
         $accepted = $request->getParam('accepted');
 
-        if (!$permission) {
+        if (!$permissions) {
             return Response::notFound(json: true);
         }
+
+        $permission = $permissions[0];
 
         if ($accepted === null) {
             return Response::badRequest(json: true);
         }
 
-        if ($permission->user()->get()->id != $request->user()->id) {
+        if (!$permission->canUserUpdate($request->user())) {
             return Response::forbidden(json: true);
         }
 
@@ -89,5 +86,26 @@ class PermissionController extends Controller
 
 
         return Response::json(['accepted' => (int) (bool) $accepted]);
+    }
+
+    public function destroy(Request $request): Response
+    {
+
+        $permissions = Permission::where([
+            ['user_id', '=', (int) $request->getParam('user')],
+            ['vet_id', '=', (int) $request->getParam('vet')]
+        ]);
+
+        if (!$permissions) {
+            return Response::notFound(json: true);
+        }
+
+        $permission = $permissions[0];
+
+        if (!$permission->canUserDelete($request->user())) {
+            return Response::forbidden(json: true);
+        }
+
+        return Response::json(['destroyed' => $permission->destroy()]);
     }
 }

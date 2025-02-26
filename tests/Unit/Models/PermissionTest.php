@@ -70,4 +70,31 @@ class PermissionTest extends TestCase
         $this->assertEquals(1, count($user->permissionsVets()->get()));
         $this->assertEquals(1, count($vet->permissionsUsers()->get()));
     }
+
+    public function test_alter_permissions(): void
+    {
+        $user = User::factory()->create();
+        $vet = VetFactory::create();
+
+        $vet->attachCRMVRegister(CRMVRegister::make([
+            "crmv" => Random::CRMV(),
+            "state" => Random::state()
+        ]));
+
+        $vet->save();
+
+        $permission = $user->permissions()->new(["vet_id" => $vet->id, "accepted" => 0]);
+
+        $permission->save();
+
+        $permission = Permission::findById($permission->id);
+
+        $this->assertTrue($permission->canUserDelete($user));
+        $this->assertTrue($permission->canUserUpdate($user));
+
+        $user2 = User::factory()->create();
+
+        $this->assertFalse($permission->canUserDelete($user2));
+        $this->assertFalse($permission->canUserUpdate($user2));
+    }
 }

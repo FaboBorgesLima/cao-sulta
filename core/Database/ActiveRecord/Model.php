@@ -71,8 +71,8 @@ abstract class Model
         /** @var array<string,mixed> */
         $arr = [
             "id" => $this->id,
-            "updated_at" => $this->updated_at,
-            "created_at" => $this->created_at
+            "updated_at" => $this->updated_at ? $this->updated_at->toMysqlTimestamp() : null,
+            "created_at" => $this->created_at->toMysqlTimestamp()
         ];
 
         foreach ($this->attributes as $name => $value) {

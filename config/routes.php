@@ -54,8 +54,8 @@ Route::middleware("auth")->group(function () {
 
     Route::get("/permission", [PermissionController::class, 'index'])->name("permission.index");
     Route::post("/permission/create", [PermissionController::class, 'store'])->name("permission.store");
+    Route::delete("/vet/{vet}/user/{user}/permission", [PermissionController::class, 'destroy'])->name("permission.destroy");
     Route::put("/vet/{vet}/user/{user}/permission", [PermissionController::class, 'update'])->name("permission.update");
-    Route::delete("/vet/{vet}/user/{user}/permission", [PermissionController::class, 'delete'])->name("permission.update");
 });
 
 Route::middleware("vet")->group(function () {
