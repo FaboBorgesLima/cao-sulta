@@ -13,9 +13,9 @@ class Storage
 
     public function upload(mixed $file, string $name): string
     {
-        move_uploaded_file($file["tmp_name"], $this->storeDir() . $name);
+        move_uploaded_file($file["tmp_name"], $this->storeDir() . $name . '.png');
 
-        return $this->baseDir() . $name . '.png?' . md5_file($this->storeDir() . $name);
+        return $this->baseDir() . $name . '.png?' . md5_file($this->storeDir() . $name . '.png');
     }
 
     public function delete(string $name): bool
