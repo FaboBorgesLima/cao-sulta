@@ -9,7 +9,9 @@ use Exception;
 
 class Storage
 {
-    public function __construct(private string $dir) {}
+    public function __construct(private string $dir)
+    {
+    }
 
     public function upload(mixed $file, string $name): string
     {

@@ -112,7 +112,6 @@ class PetController extends Controller
         $storage = new Storage('pets');
 
         if ($request->file('image')) {
-
             if ($pet->image) {
                 $storage->delete($pet->id . '.png');
             }
