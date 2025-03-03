@@ -30,7 +30,10 @@ class PermissionControllerTest extends ControllerTestCase
 
         $vet = $user->vet()->get();
 
-        $permission = $user->permissions()->new(["vet_id" => $vet->id, "accepted" => 0]);
+        $permission = $user->permissions()->new([
+            "vet_id" => $vet->id,
+            "accepted" => 0
+        ]);
 
         $permission->save();
 

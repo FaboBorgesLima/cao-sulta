@@ -41,6 +41,7 @@ class PermissionTest extends TestCase
         $this->assertEquals(1, Permission::findById($permission->id)->accepted);
 
         // Delete
+
         $permission->destroy();
 
         $this->assertNull(Permission::findById($permission->id));

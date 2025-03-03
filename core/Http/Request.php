@@ -3,6 +3,7 @@
 namespace Core\Http;
 
 use App\Models\User;
+use Core\FileSystem\File;
 use Lib\Authentication\Auth;
 
 class Request
@@ -27,9 +28,9 @@ class Request
         $this->user = Auth::user();
     }
 
-    public function file(string $name): mixed
+    public function file(string $name): ?File
     {
-        return isset($_FILES[$name]) ? $_FILES[$name] : null;
+        return File::request($name);
     }
 
     public function getMethod(): string

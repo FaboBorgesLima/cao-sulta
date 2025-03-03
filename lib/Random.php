@@ -20,6 +20,7 @@ class Random
         "mario",
         "Leslie",
     ];
+
     public static function token(): string
     {
         return str_replace(['+', '/', '='], ['-', '_', ''], base64_encode(hash("sha256", random_bytes(256), true)));
@@ -58,8 +59,7 @@ class Random
             Random::alfabeticString(5),
             Random::alfabeticString(3),
             Random::alfabeticString(2)
-        ]);
-        ;
+        ]);;
     }
 
     public static function state(): string

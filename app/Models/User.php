@@ -8,8 +8,6 @@ use Core\Database\ActiveRecord\HasManyThrough;
 use Core\Database\ActiveRecord\HasOne;
 use Core\Database\ActiveRecord\Model;
 use Database\Factory\UserFactory;
-use Lib\CPF;
-use Lib\Random;
 use Lib\Validations;
 
 class User extends Model

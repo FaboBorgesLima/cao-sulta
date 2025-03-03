@@ -25,4 +25,14 @@ class Pet extends Model
     {
         return $this->belongsTo(User::class, "user_id");
     }
+
+    public function canDestroy(User $user): bool
+    {
+        return $this->user_id == $user->id;
+    }
+
+    public function canUpdate(User $user): bool
+    {
+        return $this->user_id == $user->id;
+    }
 }

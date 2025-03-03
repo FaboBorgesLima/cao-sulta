@@ -76,10 +76,9 @@ async function acceptPermission(
   data: AcceptPermission
 ): Promise<{ accepted: boolean }> {
   const request = fetch(
-    `http://127.0.0.1/vet/${data.vet}/user/${data.user}/permission`,
+    `/permission/vet/${data.vet}/user/${data.user}?accepted=true`,
     {
-      method: "PUT",
-      body: JSON.stringify({ accepted: true }),
+      method: "POST",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },

@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Models\Pet;
 use App\Models\User;
-use App\Services\Storage;
+use Core\FileSystem\Storage;
 use Core\Http\Controllers\Controller;
 use Core\Http\Request;
 use Core\Http\Response;
@@ -91,7 +91,7 @@ class PetController extends Controller
             return Response::redirectTo(route("dashboard"));
         }
 
-        if ($pet->user()->get()->id != $request->user()->id) {
+        if (!$pet->canUpdate($request->user())) {
             $res = Response::goBack();
 
             $res->code = 401;
@@ -109,14 +109,18 @@ class PetController extends Controller
             ]);
         }
 
-        $storage = new Storage('pets');
+        $image = $request->file('image');
 
-        if ($request->file('image')) {
+
+        if ($image) {
+
+            $storage = new Storage('pets');
+
             if ($pet->image) {
-                $storage->delete($pet->id . '.png');
+                $storage->fromURL($pet->image)->delete();
             }
 
-            $pet->image = $storage->upload($request->file('image'), (string) $pet->id);
+            $pet->image = $storage->upload($image, (string) $pet->id);
         }
 
         $pet->save();
@@ -132,13 +136,18 @@ class PetController extends Controller
             return Response::redirectTo(route("dashboard"));
         }
 
-        if ($pet->user()->get()->id != $request->user()->id) {
+        if (!$pet->canDestroy($request->user())) {
+
             $res = Response::goBack();
 
             $res->code = 401;
 
             return $res;
         }
+
+        $storage = new Storage('pets');
+
+        $storage->fromURL($pet->image)->delete();
 
         $pet->destroy();
 

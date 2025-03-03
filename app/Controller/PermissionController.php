@@ -17,10 +17,10 @@ class PermissionController extends Controller
                 $user = $vet->user()->get();
                 return array_merge($vet->toArray(), [
                     "user" => $user->toArray(),
-                    "permission" => Permission::where([
+                    "permission" => Permission::findBy([
                         ['vet_id', '=', $vet->id],
                         ['user_id', '=', $user->id]
-                    ])[0]->toArray()
+                    ])
                 ]);
             },
             $request->user()->permissionsVets()->get()
@@ -56,7 +56,6 @@ class PermissionController extends Controller
 
     public function update(Request $request): Response
     {
-
         $permissions = Permission::where([
             ['user_id', '=', (int) $request->getParam('user')],
             ['vet_id', '=', (int) $request->getParam('vet')]
